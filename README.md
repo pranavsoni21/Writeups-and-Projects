@@ -16,4 +16,4 @@ This repo contains my personal cybersecurity projects, scripts, and writeups fro
 This repo is for educational purposes only. Do not use these tools or techniques on systems you don’t own or have permission to test.
 
 ## 📧 Contact
-Feel free to connect or reach out: [LinkedIn](www.linkedin.com/in/soni-pranav), [Email](pranavsoni181@gmail.com)
+Feel free to connect or reach out: [LinkedIn](http://linkedin.com/in/soni-pranav), [Email](pranavsoni181@gmail.com)
