@@ -14,17 +14,17 @@ def prepare_args():
             args(argparse.Namespace)
     """
     parser = ArgumentParser(description="Python Based Fast Port Scanner", usage="%(prog)s 192.168.1.1", epilog="Example: %(prog)s -s 20 -e 40000 -t 500 -V 192.168.1.1")
-    parser.add_argument(metavar="IPv4",dest="ip",help="IPv4 address to scan")
-    parser.add_argument("-s","--start",metavar="",type=int,help="starting port",default=1)
-    parser.add_argument("-e","--end",metavar="",type=int,help="ending port",default=65535)
-    parser.add_argument("-t","--threads",metavar="",type=int,help="threads to use",default=500)
-    parser.add_argument("-V","--verbose",dest="verbose",action="store_true",help="Verbose output")
-    parser.add_argument("-v","--version",action="version",version="%(prog)s 1.0",help="display version information")
+    parser.add_argument(metavar="IPv4", dest="ip", help="IPv4 address to scan")
+    parser.add_argument("-s", "--start", metavar="", type=int, help="starting port", default=1)
+    parser.add_argument("-e", "--end", metavar="", type=int, help="ending port", default=65535)
+    parser.add_argument("-t", "--threads", metavar="", type=int, help="threads to use", default=500)
+    parser.add_argument("-V", "--verbose", dest="verbose", action="store_true", help="Verbose output")
+    parser.add_argument("-v", "--version", action="version", version="%(prog)s 1.0", help="display version information")
     args = parser.parse_args()
     return args
 
 
-def prepare_ports(start:int,end:int):
+def prepare_ports(start: int, end: int):
     """generator function for ports
 
         arguments:
@@ -45,14 +45,14 @@ def scan_port():
             s.connect((arguments.ip, port))
             open_ports.append(port)
             if arguments.verbose:
-                print(f"\r{open_ports}",end="")
+                print(f"\r{open_ports}", end="")
         except (ConnectionRefusedError, socket.timeout, PermissionError):
             continue
         except StopIteration:
             break
 
 
-def prepare_threads(threads:int):
+def prepare_threads(threads: int):
     """create, start, join threads
     arguments:
     threads (int): number of threads to use
@@ -68,14 +68,13 @@ def prepare_threads(threads:int):
         thread.join()
 
 
-
 if __name__ == "__main__":
     arguments = prepare_args()
-    ports = prepare_ports(arguments.start,arguments.end)
+    ports = prepare_ports(arguments.start, arguments.end)
     start_time = time()
     prepare_threads(arguments.threads)
     end_time = time()
     if arguments.verbose:
         print()
     print(f"Open ports found: {open_ports}")
-    print(f"Time Taken - {round(end_time-start_time,2)}")
+    print(f"Time Taken - {round(end_time-start_time, 2)}")
