@@ -32,6 +32,10 @@ python3 advanced-port-scanner.py [options] <IPv4>
 | `-V, --verbose` | Enable live verbose output                |
 | `-v, --version` | Show version info                         |
 
+## Sample image
+
+![Port scanner demo](./port-scanner.png)
+
 ## Why I Built This
 
 While preparing for the PNPT exam and practicing on TryHackMe & Hack The Box, I wanted to go beyond tools like Nmap and understand the internals of socket-based scanning. This scanner is my custom-built solution for rapid reconnaissance in internal environments.
@@ -41,4 +45,3 @@ While preparing for the PNPT exam and practicing on TryHackMe & Hack The Box, I 
 This tool is for educational and authorized testing purposes only.
 Do NOT scan systems you don’t own or have permission to test.
 
-![Port scanner demo](./port-scanner.png)
