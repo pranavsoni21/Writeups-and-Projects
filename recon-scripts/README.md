@@ -40,3 +40,5 @@ While preparing for the PNPT exam and practicing on TryHackMe & Hack The Box, I 
 
 This tool is for educational and authorized testing purposes only.
 Do NOT scan systems you don’t own or have permission to test.
+
+![Port scanner demo](./port-scanner.png)

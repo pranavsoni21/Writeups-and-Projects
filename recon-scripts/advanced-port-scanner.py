@@ -6,6 +6,18 @@ from threading import Thread
 from time import time
 
 open_ports = []
+common_ports = {
+    21: 'FTP',
+    22: 'SSH',
+    23: 'Telnet',
+    25: 'SMTP',
+    53: 'DNS',
+    80: 'HTTP',
+    110: 'POP3',
+    143: 'IMAP',
+    443: 'HTTPS',
+    3389: 'RDP'
+}
 
 
 def prepare_args():
@@ -77,4 +89,7 @@ if __name__ == "__main__":
     if arguments.verbose:
         print()
     print(f"Open ports found: {open_ports}")
+    for port in open_ports:
+        service = common_ports.get(port, 'Unknown')
+        print(f"[+] Port {port} open ({service})")
     print(f"Time Taken - {round(end_time-start_time, 2)}")
