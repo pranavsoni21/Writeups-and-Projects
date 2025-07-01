@@ -41,7 +41,7 @@ Running: Linux 4.X
 
 Port 8000:
 
-![image.png](image.png)
+![Screenshot 2025-06-30 185238.png](..%2F..%2F..%2FOneDrive%2FPictures%2FScreenshots%201%2FScreenshot%202025-06-30%20185238.png)
 
 Nothing intresting here, not even in source code. Tried directory busting and found only single directory named /airplane. Nothing juicy was there too. 
 
@@ -88,7 +88,7 @@ http://airplane.thm:8000/?page=./../../../../proc/self/cmdline
 
 An [app.py](http://app.py) was running there via user hudson, we can check that app.py too.
 
-![Screenshot 2025-06-30 191022.png](Screenshot_2025-06-30_191022.png)
+![Screenshot 2025-06-30 191022.png](..%2F..%2F..%2FOneDrive%2FPictures%2FScreenshots%201%2FScreenshot%202025-06-30%20191022.png)
 
 There was nothing interesting, it was the same page which was hosting index.php and vulnerable to LFI. Nothing more to take from here.
 
