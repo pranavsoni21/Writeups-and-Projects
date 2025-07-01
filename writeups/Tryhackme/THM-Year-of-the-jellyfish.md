@@ -1,9 +1,5 @@
-## Year of the jellyfish
-
-Started with nmap scan:
-
-
 # TryHackMe - Year of the Jellyfish
+
 **Platform:** TryHackMe  
 **Difficulty:** Hard
 **Category:** Linux / Web / Enumeration  
