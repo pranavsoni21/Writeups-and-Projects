@@ -41,7 +41,8 @@ Running: Linux 4.X
 
 Port 8000:
 
-![image.png](image.png)
+![Screenshot 2025-06-30 185238](https://github.com/user-attachments/assets/e02a51f1-4a9b-47cd-8102-c195e98fccec)
+
 
 Nothing intresting here, not even in source code. Tried directory busting and found only single directory named /airplane. Nothing juicy was there too. 
 
@@ -88,7 +89,8 @@ http://airplane.thm:8000/?page=./../../../../proc/self/cmdline
 
 An [app.py](http://app.py) was running there via user hudson, we can check that app.py too.
 
-![Screenshot_2025-06-30_191022.png](Screenshot_2025-06-30_191022.png)
+![Screenshot 2025-06-30 191022](https://github.com/user-attachments/assets/5a7048be-94e7-4324-b1a1-060811b045f0)
+
 
 There was nothing interesting, it was the same page which was hosting index.php and vulnerable to LFI. Nothing more to take from here.
 
