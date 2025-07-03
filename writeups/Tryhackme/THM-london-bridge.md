@@ -44,17 +44,18 @@ Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 
 Port 8080:
 
-![img.png](img.png)
+![image](https://github.com/user-attachments/assets/e4d60878-9585-4ccd-af4e-232584a667ce)
 
 Nothing on the home page, lets’s explore other directories and brute force other hidden directories too…
 
 /gallery
 
-![img_1.png](img_1.png)
+![image 1](https://github.com/user-attachments/assets/4b705909-f666-4bda-9e0a-9e8130690f12)
 
 It has image upload functionality, I tried to upload webshell here , but it didn’t work. Let’s check source code, if anything of our interest were there.
 
-![img_2.png](img_2.png)
+![image 2](https://github.com/user-attachments/assets/2aea3574-3706-471b-9879-1f4c353f3ae4)
+
 
 There was a hint we find in source code, that means there may be other directory or whatever where there user can upload images via links too. Let’s fuzz.
 
@@ -67,17 +68,20 @@ Looks like we didn’t find all directories, so let’s try once more and now wi
 └─$ ffuf -u http://10.10.27.22:8080/FUZZ -c -w /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt -ic
 ```
 
-![img_3.png](img_3.png)
+![image 3](https://github.com/user-attachments/assets/f52229e2-fa61-4486-aeb6-a7344d99c586)
+
 
 Yeah, that’s what we were looking for /dejaview, let’s search for that in browser.
 
-![img_4.png](img_4.png)
+![image 4](https://github.com/user-attachments/assets/4916cd4c-6bb0-4e72-976d-0a68df97e3b9)
+
 
 Here looks like we can upload image url and it will show that up here in that page, indication for Server site request forgery(SSRF).
 
 So, first let’s try to intercept a uploading request of existing image located at /uploads/04.jpg via burp suite.
 
-![img_5.png](img_5.png)
+![image 5](https://github.com/user-attachments/assets/cd7668b8-0041-4eca-a249-89f6fd4a7700)
+
 
 Tried if we can search for [localhost](http://localhost) 127.0.0.1 in that image_url parameter but that get no content back. Looks like SSRF does not work for this parameter.
 
@@ -92,11 +96,12 @@ We have to fuzz for parameters, what are other parameters exist in this page, le
 └─$ ffuf -X POST -u http://10.10.194.61:8080/view_image -w /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt -ic -H 'Content-Type: application/x-www-form-urlencoded' -d 'FUZZ=/uploads/04.jpg' -fw 226 
 ```
 
-![img_6.png](img_6.png)
+![image 6](https://github.com/user-attachments/assets/55cfa25f-ebbb-423d-88e1-974017173394)
+
 
 So, www parameter also works there, let’s check that via requesting [localhost](http://localhost) at http://127.0.0.1:8080
 
-
+![image 7](https://github.com/user-attachments/assets/d0219392-8974-4060-b2e3-06652e2a41ed)
 
 403 fobidden, means parameter is working well but, maybe there were some protection against SSRF, so that we can’t request for [localhost](http://localhost), but there were other ways to bypass this.
 
@@ -159,7 +164,7 @@ st:00011211aaaa
 127.1.1.1:8080#\@127.2.2.2:8080/
 ```
 
-Save these payloads in a file named ssrf-localhost-bypass.txt and now it’s time fuzz that agian.
+Save these payloads in a file named ssrf-localhost-bypass.txt and now it’s time to fuzz that agian.
 
 ```bash
 ┌──(kali㉿kali)-[~/tryhackme/london-bridge]
@@ -177,12 +182,15 @@ localhost/?d={domain}   [Status: 403, Size: 239, Words: 27, Lines: 5, Duration: 
 We found too many which could work , but for now, will use 127.1:8080
 
 Now, we can try to enumerate all the internal ports running via fuzzing again.
+```bash
+seq 65365 > ports.txt
+```
 
-![image.png](image%208.png)
+![image 8](https://github.com/user-attachments/assets/eab16dd5-e6c4-4f8d-b68c-aa5b8b8269d8)
 
 Port 80 was running on localhost
 
-![image.png](image%209.png)
+![image 9](https://github.com/user-attachments/assets/bcf3170c-711f-48d8-ac2c-e43ed40b6093)
 
 It was a different index page that we found on port 8080.
 
@@ -192,14 +200,13 @@ We have to enumerate it further , means its directories on port 80:
 ┌──(kali㉿kali)-[~/tryhackme/london-bridge]
 └─$ ffuf -X POST -u http://10.10.247.100:8080/view_image -w /usr/share/wordlists/seclists/Discovery/Web-Content/raft-medium-words-lowercase.txt  -H 'Content-Type: application/x-www-form-urlencoded' -d 'www=http://127.1:80/FUZZ' -fw 96
 ```
-
-![image.png](image%2010.png)
+![image 10](https://github.com/user-attachments/assets/5c5e08f0-9bd4-44d0-a2e2-17fea46ebea8)
 
 Got so many directories for port 80 , .ssh looks interesting, let’s check it and see if we could able to get user’s id_rsa via this way.
 
-![image.png](image%2011.png)
+![image 11](https://github.com/user-attachments/assets/09bf92ef-a228-41b4-945e-e02f0bd5ebe5)
 
-![image.png](image%2012.png)
+![image 12](https://github.com/user-attachments/assets/54dc6d18-0ea7-48fb-97bf-7f1cd36e6b5d)
 
 ### Shell as beth
 
@@ -211,8 +218,7 @@ Save that id_rsa key in our kali machine, give it permission 600 and use it to s
 ┌──(kali㉿kali)-[~/tryhackme/london-bridge]
 └─$ chmod 600 id_rsa
 ```
-
-![image.png](image%2013.png)
+![image 13](https://github.com/user-attachments/assets/26e7ba91-7227-4685-8d35-aeb95799e0f0)
 
 We searched for user.txt in beth’s home directory but didn’t find, so tried to find it in the whole system
 
@@ -229,25 +235,25 @@ THM{REDACTED}**
 
 Using `uname -a`, we output all the necessary information to find a suitable kernel exploit. We have a linux kernel `4.5.0-122` and we are running Ubuntu.
 
-![image.png](image%2014.png)
+![image 14](https://github.com/user-attachments/assets/2fd896ae-ecb1-4228-9cd8-57bef01ab81e)
 
 Let’s google it and we find a exploit that was suitable for our machine :
 
 [https://github.com/zerozenxlabs/ZDI-24-020/blob/main/exploit.c](https://github.com/zerozenxlabs/ZDI-24-020/blob/main/exploit.c)
 
-![image.png](image%2015.png)
+![image 15](https://github.com/user-attachments/assets/9a378dcd-2275-4bd7-99ef-ec923b3b2e3a)
 
 That was a code written in c language, so take a look at our target machine, if it had gcc to complile that code and thank god , it had gcc installed.
 
-![image.png](image%2016.png)
+![image 16](https://github.com/user-attachments/assets/96a9ade0-6240-4f4a-89fe-03dec9d695b4)
 
 We downloaded exploit.c to our kali machine, and then via wget we transfered that exploit.c to our attacker machine
 
-![image.png](image%2017.png)
+![image 17](https://github.com/user-attachments/assets/b838408f-0fc7-409a-a1e9-735331a469da)
 
 Now, we just have to compile that exploit.c and run it.
 
-![image.png](image%2018.png)
+![image 18](https://github.com/user-attachments/assets/4e075e6f-710f-4164-b03f-b39f5eb97534)
 
 And we are root now!
 
