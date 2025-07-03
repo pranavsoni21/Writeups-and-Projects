@@ -164,7 +164,7 @@ st:00011211aaaa
 127.1.1.1:8080#\@127.2.2.2:8080/
 ```
 
-Save these payloads in a file named ssrf-localhost-bypass.txt and now it’s time fuzz that agian.
+Save these payloads in a file named ssrf-localhost-bypass.txt and now it’s time to fuzz that agian.
 
 ```bash
 ┌──(kali㉿kali)-[~/tryhackme/london-bridge]
@@ -182,6 +182,9 @@ localhost/?d={domain}   [Status: 403, Size: 239, Words: 27, Lines: 5, Duration: 
 We found too many which could work , but for now, will use 127.1:8080
 
 Now, we can try to enumerate all the internal ports running via fuzzing again.
+```bash
+seq 65365 > ports.txt
+```
 
 ![image 8](https://github.com/user-attachments/assets/eab16dd5-e6c4-4f8d-b68c-aa5b8b8269d8)
 
