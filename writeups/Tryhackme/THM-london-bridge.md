@@ -8,7 +8,7 @@ Difficulty: Medium
 
 Date: 02/07/2025
 
-Status:
+Status: Rooted
 
 ---
 
