@@ -45,13 +45,15 @@ Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 
 ### Port 80:
 
-![image.png](image.png)
+![image](https://github.com/user-attachments/assets/cf7c6939-547b-440c-bec4-16b57581233b)
+
 
 Just a profile page of ryan motgomery(0day), noting unusual here. Not seeing anything which could be exploitable here. So, next step would be source code review, directory bruteforcing via ffuf and nikto scan for finding underlying technologies.
 
 First of all, if we see source code, there is nothing unusual and no unusual comments developers left here. 
 
-![image.png](image%201.png)
+![image 1](https://github.com/user-attachments/assets/c87240e9-a2a3-42fd-8ad9-22072f67bae7)
+
 
 Let’s bruteforce directories with ffuf:
 
@@ -60,17 +62,18 @@ Let’s bruteforce directories with ffuf:
 └─$ ffuf -u http://10.10.216.81/FUZZ -c -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -ic
 ```
 
-![image.png](image%202.png)
+![image 2](https://github.com/user-attachments/assets/e2f12273-442a-4784-bb2a-4bbfcc890157)
+
 
 There are some directories running with the application, we have to check them one by one.
 
 The most interesting directory was /backup , there we can see an id_rsa content file, so tried putting in our system give it 600 permission at tried to connect to user ryan via ssh, but that id_rsa file was encrypted, so have to decrypt it using ssh2john tool, here we got success and found passphrasse for that file. Again tried to connect to ssh but here comes the twist.
 
-![image.png](image%203.png)
+![image 3](https://github.com/user-attachments/assets/f486c267-f783-4d6f-8704-7ff75f1be0e5)
 
-![image.png](image%204.png)
+![image 4](https://github.com/user-attachments/assets/103fbc65-6621-4dce-9051-32268c88e23f)
 
-![image.png](image%205.png)
+![image 5](https://github.com/user-attachments/assets/04ae4ced-eb57-4c04-899a-90bae8773ad7)
 
 in Linux typically occurs when you're trying to connect to an **SSH server** using a **public key**, but your **SSH client and server cannot agree on a matching key algorithm or signature type** to use for authentication.
 
@@ -78,15 +81,14 @@ That means, it was just a rabbit hole, we have to look for something else to gai
 
 Nikto scan:
 
-![image.png](image%206.png)
+![image 6](https://github.com/user-attachments/assets/22b76c1b-8c08-43a7-ac87-7d40db96008c)
 
 This indicates that there’s a file called `test.cgi` in the `/cgi-bin/` directory which might be vulnerable to [ShellShock](http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2014-6271) — a devastating vulnerability which affects older versions of Bash. CGI files are used by the webserver to execute commands in a native scripting language — in this case, that means that our `test.cgi` file will be running Bash commands. With vulnerable versions of bash, injecting a function definition (`(){ :;};`) into the input of such a script would force the script to execute any subsequent commands. Like so:
 
 ```bash
 curl -A "() { :;}; echo Content-Type: text/html; echo; /bin/cat /etc/passwd;" http://10.10.216.81/cgi-bin/test.cgi
 ```
-
-![image.png](image%207.png)
+![image 7](https://github.com/user-attachments/assets/71970607-e335-41db-9eb1-9785b00f1c72)
 
 Successfully exploited shellshock vulnerability.
 
@@ -171,11 +173,11 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 Let’s search for exploit available on searchsploit for our target OS and kernel version:
 
-![image.png](image%208.png)
+![image 8](https://github.com/user-attachments/assets/6d891f4b-3b6a-4769-8040-73047308e40a)
 
 First one, looks perfect for our requirements, let’s grab that exploit to our current working directory.
 
-![image.png](image%209.png)
+![image 9](https://github.com/user-attachments/assets/622f7a65-59dd-413a-b59d-09477ed36825)
 
 Transfer it to target machine:
 
@@ -215,7 +217,7 @@ export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 Let’s try to compile and run that exploit again.
 
-![image.png](image%2010.png)
+![image 10](https://github.com/user-attachments/assets/4a4f8b2a-40d7-4c1b-a792-89f02dbeafb2)
 
 Now it worked! And we were root now!
 
