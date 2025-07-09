@@ -47,7 +47,7 @@ Service Info: OS: Unix
 
 ### Port 80:
 
-![image.png](image.png)
+![image](https://github.com/user-attachments/assets/11160c4e-de92-4105-9bf3-c14cf085bf99)
 
 Just a index page there, nothing of our interest.
 
@@ -60,7 +60,7 @@ While directory fuzzing, found a /backups endpoint, so checked that and there wa
 backups                 [Status: 301, Size: 236, Words: 14, Lines: 8, Duration: 181ms]
 ```
 
-![image.png](image%201.png)
+![image 1](https://github.com/user-attachments/assets/56a502c3-fd5f-4ae5-8843-da2094958b9d)
 
 ```bash
 ┌──(ghost㉿kali)-[~/tryhackme/overpass-3]
@@ -86,7 +86,7 @@ gpg: Note: secret key 9E86A1C63FB96335 expired at Tue 08 Nov 2022 04:14:31 PM ES
 
 We can read that CustomerDetails.xlsx file now, and here are some credentials of users. We can try them on ftp which we found open while nmap scanning.
 
-![image.png](image%202.png)
+![image 2](https://github.com/user-attachments/assets/f20e85dd-3146-4852-aaa3-c4ebbee9f2c9)
 
 We were able to log in to ftp with paradox user’s credentials and as we can see this directory was the same that were hosted on port 80 http server.
 
@@ -203,7 +203,7 @@ The key's randomart image is:
 +----[SHA256]-----+
 ```
 
-![image.png](image%203.png)
+![image 3](https://github.com/user-attachments/assets/9e48234a-6804-4e5a-82e5-0fc86fdf21e7)
 
 Now, copy that public key from [paradox.pub](http://paradox.pub) and paste that in paradox’s authorized keys.
 
