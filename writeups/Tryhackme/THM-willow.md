@@ -77,13 +77,13 @@ Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 
 ### Port 80:
 
-![image.png](image.png)
+<img width="1918" height="708" alt="image" src="https://github.com/user-attachments/assets/46bb829e-4845-4a5b-9e42-ca2f8f0cf4eb" />
 
 I didn’t understand what was this mess?
 
 But, looks like a large hex value, so copied it all from here and put them in online hex decoder, there with the hint given, I understood what was this finally. → Encrypted SSH private key.
 
-![image.png](image%201.png)
+<img width="1882" height="958" alt="image 1" src="https://github.com/user-attachments/assets/4e2cb79d-e74e-48f2-85d7-4b22db928d69" />
 
 <aside>
 💡
@@ -196,7 +196,7 @@ So, basically what this does -
     
     From that Private key pair: First number is d(private key exponent) and second one is n(modulus).
     
-    ![image.png](image%202.png)
+    <img width="1896" height="147" alt="image 2" src="https://github.com/user-attachments/assets/d7a11efe-60b5-4e5b-80a0-c14ed21c7c60" />
     
 - Decrypts and print each character using:
     
@@ -324,7 +324,7 @@ Enter passphrase for key 'id_rsa':
 user.jpg                                                                                             100%   12KB  15.3KB/s   00:00  
 ```
 
-![image.png](image%203.png)
+<img width="1912" height="770" alt="image 3" src="https://github.com/user-attachments/assets/3d159fad-7098-4fee-9537-f8ddef6d85e8" />
 
 ---
 
@@ -352,7 +352,7 @@ Room hint: Where, on a Linux system, would you first look for unmounted partitio
 
 Ok, it means willow is allowed to mount disks from the `/dev` directory — the default location for unmounted partitions, amongst other things. Let’s check!
 
-![image.png](image%204.png)
+<img width="1875" height="369" alt="image 4" src="https://github.com/user-attachments/assets/fc0df3c9-23ef-4e5e-9885-59de519c1aab" />
 
 There’s a hidden_bakup file. Let’s see what it contains.
 
