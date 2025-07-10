@@ -207,7 +207,7 @@ So, basically what this does -
     ```
     
 
-Let’s let’s run this python script by providing the arguments needed:
+Let’s run this python script by providing the arguments needed:
 
 ```bash
 ┌──(ghost㉿kali)-[~/tryhackme/willow]
@@ -427,7 +427,7 @@ We have a image file user.jpg which contains user flag, what if there’s someth
 ```bash
 ┌──(ghost㉿kali)-[~/tryhackme/willow]
 └─$ steghide extract -sf user.jpg                                                                                  
-Enter passphrase: 
+Enter passphrase: <root's password>
 wrote extracted data to "root.txt".
                                                                                                                                        
 ┌──(ghost㉿kali)-[~/tryhackme/willow]
