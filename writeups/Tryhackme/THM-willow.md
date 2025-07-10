@@ -427,7 +427,7 @@ We have a image file user.jpg which contains user flag, what if there’s someth
 ```bash
 ┌──(ghost㉿kali)-[~/tryhackme/willow]
 └─$ steghide extract -sf user.jpg                                                                                  
-Enter passphrase: <root's password>
+Enter passphrase: <root password>
 wrote extracted data to "root.txt".
                                                                                                                                        
 ┌──(ghost㉿kali)-[~/tryhackme/willow]
