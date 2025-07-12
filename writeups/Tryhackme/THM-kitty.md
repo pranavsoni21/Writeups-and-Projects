@@ -51,31 +51,31 @@ Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 
 url: `http://10.10.75.218`
 
-![image.png](image.png)
+<img width="1919" height="495" alt="image" src="https://github.com/user-attachments/assets/9e577ff7-d1ce-4985-b8fe-c5e525e6bcd0" />
 
 There’s a login page, we can try for weak user:pass combinations here like admin:password, admin:admin but nothing worked!
 
-![image.png](image%201.png)
+<img width="1919" height="495" alt="image 1" src="https://github.com/user-attachments/assets/62910085-23ee-400a-ac7c-98c73e96e728" />
 
 We can try to register here with any username: pass . I used hello:pass123
 
-![image.png](image%202.png)
+<img width="1919" height="525" alt="image 2" src="https://github.com/user-attachments/assets/5ae740a4-9d72-4e7e-8def-612aadece118" />
 
 There’s nothing inside even after registering, this site is still in development.
 
-![image.png](image%203.png)
+<img width="1919" height="609" alt="image 3" src="https://github.com/user-attachments/assets/66cb2fad-60a0-401b-9837-82a901ee6487" />
 
 We can try for sql injection on the login page: payload = `hello’ OR 1=1— -`
 
-![image.png](image%204.png)
+<img width="1911" height="467" alt="image 4" src="https://github.com/user-attachments/assets/fc1c2020-9c80-4e4f-b630-4a6494c5ae7d" />
 
-![image.png](image%205.png)
+<img width="1919" height="359" alt="image 5" src="https://github.com/user-attachments/assets/114d7fc6-7e68-4dcb-96cb-286b0f81423c" />
 
 There’s maybe some mechanism which is detecting our this sql payload. Let’s try different payload. 
 
 payload: `hello’ AND 1=1— -`
 
-![image.png](image%206.png)
+<img width="1919" height="498" alt="image 6" src="https://github.com/user-attachments/assets/018d1754-8284-4311-979e-10fc1a335ff1" />
 
 Ok, now it worked, so that lesson comes from tib3rius’s tryhackme room “Lesson Learned?”, where he tried to demonstrate that why `' OR 1=1— -` can cause disasters. You can check that room yourself.
 
@@ -97,7 +97,7 @@ We can try UNION attack here to determine the no. of colums firstly, then will a
 
 increase it one by one like `' UNION SELECT 1-- -` then `' UNION SELECT 1,2-- -` till we bypass that login page.
 
-![image.png](image%207.png)
+<img width="1919" height="481" alt="image 7" src="https://github.com/user-attachments/assets/6cdbf2a9-ae99-4181-8fcb-d94c9a8a17ca" />
 
 so, 4 is the lucky no. here, let’s make our query according to these.
 
@@ -244,7 +244,7 @@ THM{31e606998.......REDACTED}
 
 While enumerating, we used pspy64 and saw that a cronjob is running in background, which executes the script `/opt/log_checker.sh` as root.
 
-![image.png](image%208.png)
+<img width="1339" height="168" alt="image 8" src="https://github.com/user-attachments/assets/b1041925-d854-44c4-bed5-958181b4c917" />
 
 Have a look at that script.
 
@@ -289,19 +289,19 @@ drwxr-xr-x 4 root     root     4096 Nov 15  2022 ..
 
 Check index.php:
 
-![image.png](image%209.png)
+<img width="1523" height="717" alt="image 9" src="https://github.com/user-attachments/assets/eb7e7d82-2be6-413f-a03a-b4e063604ac5" />
 
 It is getting IP via ‘http-x-forwarded’ header, that means we can control it and will inject our commands too.
 
 But, first of all let’s check if it’s running on the same 80 port or somewhere else:
 
-![image.png](image%2010.png)
+<img width="1496" height="367" alt="image 10" src="https://github.com/user-attachments/assets/04570040-2007-475c-ad40-1f438b51ac58" />
 
 Our doubt was correct, as we can see an instance running on port 8080 locally(127.0.0.1).
 
 To confirm we can check out it’s config page and see it’s documentRoot is at /var/www/development.
 
-![image.png](image%2011.png)
+<img width="1446" height="687" alt="image 11" src="https://github.com/user-attachments/assets/a23682c8-7f59-4088-a277-d541ae6a39d0" />
 
 Now, we can make curl request internally to port 8080 with custom headers and check our attack.
 
