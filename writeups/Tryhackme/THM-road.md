@@ -56,17 +56,17 @@ In writeups, I don’t write steps which didn’t worked but you should always e
 
 </aside>
 
-![image.png](image.png)
+<img width="1914" height="797" alt="image" src="https://github.com/user-attachments/assets/cf914c21-146e-4955-879e-d940574eb4a2" />
 
 As we click on merchant central, it redirect us to [`/v2/admin/login.html`](http://10.10.221.173/v2/admin/login.html) . Here we can try combination of weak passwords, but it didn’t worked. Let’s register ourself as test user(test@test.com:pass) , so that we can see what we can access or modify from inside.
 
-![image.png](image%201.png)
+<img width="1913" height="714" alt="image 1" src="https://github.com/user-attachments/assets/ba847cd1-0a3f-4274-acca-1b2a4280780d" />
 
 After signing in , we can see our dashboard and a lot of inactive links except some resetUser option. Let’s check our profile page.
 
-![image.png](image%202.png)
+<img width="1919" height="789" alt="image 2" src="https://github.com/user-attachments/assets/3fabf3a2-f33e-4773-a60e-b5c30491a003" />
 
-![image.png](image%203.png)
+<img width="1914" height="788" alt="image 3" src="https://github.com/user-attachments/assets/c4001aaf-4545-4361-ac1b-c09886a9b2ac" />
 
 At profile page, there is a profile image upload functionality, but only admin has access for that currently. And also we got the admin’s email = admin@sky.thm
 
@@ -76,17 +76,17 @@ At profile page, there is a profile image upload functionality, but only admin h
 
 Coming back to resetUser page:
 
-![image.png](image%204.png)
+<img width="1919" height="721" alt="image 4" src="https://github.com/user-attachments/assets/b4d24ca0-dd66-4807-954b-5cd01b622c3d" />
 
 I intercepted password reset request and there I was able to change email and change the admin’s password via the help of that admin email we got earlier. Now, we can log in to admin’s account.
 
-![image.png](image%205.png)
+<img width="1917" height="792" alt="image 5" src="https://github.com/user-attachments/assets/0ba82f24-14ae-4ef9-80d5-00cb9e9e82c3" />
 
 And now can also use that image upload functionality via admin’s account by uploading webshell(php-reverse-shell) here.
 
 And we can check it’s source code there is a endpoint `/v2/profileimages` from where we can trigger our uploaded image(shell).
 
-![image.png](image%206.png)
+<img width="1918" height="792" alt="image 6" src="https://github.com/user-attachments/assets/276737cb-279a-46ec-ab04-0bafb0b2d815" />
 
  Now, just trigger that shell from that endpoint and keep your netcat on listening mode.
 
