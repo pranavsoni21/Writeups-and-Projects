@@ -53,13 +53,13 @@ Network Distance: 5 hops
 
 ### Port 80:
 
-![image.png](image.png)
+<img width="1918" height="717" alt="image" src="https://github.com/user-attachments/assets/52e22691-00fc-4375-9ae8-0d68bec3073d" />
 
 Here, we got the answer for first question.
 
 Let’s explore this website, there is nothing more of our interest in this index page. Maybe we can check /robots.txt 
 
-![image.png](image%201.png)
+<img width="1681" height="673" alt="image 1" src="https://github.com/user-attachments/assets/b0b6e228-0ada-4a5e-ab71-d543ffb20b7a" />
 
 As this website is running on Joomla CMS, we can enumerate it further via joomscan tool.
 
@@ -67,7 +67,7 @@ As this website is running on Joomla CMS, we can enumerate it further via joomsc
 $ joomscan http://10.10.174.189/
 ```
 
-![image.png](image%202.png)
+<img width="1547" height="747" alt="image 2" src="https://github.com/user-attachments/assets/94100f33-8b6e-41ca-9b1a-6b7d6ce168c0" />
 
 As we can see what version of joomla is running on this webserver, we have our 2nd question answered.
 
@@ -91,7 +91,7 @@ Shellcodes: No Results
 
 There is a .txt file , maybe telling us how to perform exploit. Let’s check that.
 
-![image.png](image%203.png)
+<img width="1917" height="768" alt="image 3" src="https://github.com/user-attachments/assets/dd3affb0-43e1-4f78-94e5-48a5dea46cd5" />
 
 As we thought, there are steps to perform this attack. We can use these steps if we want to exploit it with sqlmap otherwise these is a python script “joomblah.py”(Preferred method), which we can use to perform same attack. I am going with “joomblah.py” for this room.
 
@@ -151,9 +151,9 @@ Now, as we cracked jonah’s hash and we have plain text password, we can now lo
 
 url = [`http://10.10.174.189/administrator`](http://10.10.174.189/administrator/index.php?option=com_templates&view=template&id=506&file=L2luZGV4LnBocA%3D%3D)
 
-![image.png](image%204.png)
+<img width="1916" height="684" alt="image 4" src="https://github.com/user-attachments/assets/c2b15aa3-2579-400e-a887-afa7b799b9b1" />
 
-![image.png](image%205.png)
+<img width="1919" height="718" alt="image 5" src="https://github.com/user-attachments/assets/36aa23aa-ff03-40ca-b8cf-ed00cc56ff83" />
 
 As we can see we are welcomed with CMS management sceen as we are admin now.
 
@@ -161,21 +161,22 @@ While looking around that management site, I see here we can edit php pages , so
 
 So, it in Extensions → Templates → Templates → Protostar template → index.php
 
-![image.png](image%206.png)
+<img width="1919" height="715" alt="image 6" src="https://github.com/user-attachments/assets/327cf55b-e059-438b-9cbf-adf50072b273" />
 
-![image.png](image%207.png)
+<img width="1916" height="690" alt="image 7" src="https://github.com/user-attachments/assets/e0b88741-0559-4f5b-84cc-34c39f91ed9d" />
 
-![image.png](image%208.png)
+<img width="1919" height="708" alt="image 8" src="https://github.com/user-attachments/assets/c44231d3-74e8-4753-a954-3d6418adde46" />
 
 Ok, here we can change index.php file and we will upload [php-reverse-shell(pentest-monkey)](https://github.com/pentestmonkey/php-reverse-shell).
 
-![Add your kali machine’s tun0 IP here.](image%209.png)
+![Add your kali machine’s tun0 IP here.]<img width="1918" height="760" alt="image 9" src="https://github.com/user-attachments/assets/b7d158f3-5376-4171-821a-e1610e99b5fb" />
+
 
 Add your kali machine’s tun0 IP here.
 
 Copy it all from here and paste that into index.php and click on save and close.
 
-![image.png](image%2010.png)
+<img width="1918" height="792" alt="image 10" src="https://github.com/user-attachments/assets/a07fdeb9-93a5-4228-991b-9b3180364ebf" />
 
 Setup our netcat listner on listening mode on the port you specified on webshell.
 
@@ -240,7 +241,7 @@ drwxr-xr-x.  2 apache apache    24 Dec 15  2019 tmp
 
 Let’s check it’s content:
 
-![image.png](image%2011.png)
+<img width="1665" height="595" alt="image 11" src="https://github.com/user-attachments/assets/10628613-d745-428c-8870-d7e87649e348" />
 
 And we got a password, maybe we can use it for jjameson’ account.
 
@@ -281,7 +282,7 @@ We can check, how can we escalate our privileges via yum on gtfobins.
             
             GTFOBins](https://gtfobins.github.io/gtfobins/yum/#sudo)
 
-![image.png](image%2012.png)
+<img width="1894" height="873" alt="image 12" src="https://github.com/user-attachments/assets/75c6a43c-18aa-43d5-94d3-61866c16e018" />
 
 Let’s just follow the steps:
 
