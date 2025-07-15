@@ -149,7 +149,7 @@ Session completed.
 
 Now, as we cracked jonah’s hash and we have plain text password, we can now login to joomla CMS login page.
 
-url = [`http://10.10.174.189/administrator`](http://10.10.174.189/administrator/index.php?option=com_templates&view=template&id=506&file=L2luZGV4LnBocA%3D%3D)
+url = [`http://10.10.174.189/administrator`]
 
 <img width="1916" height="684" alt="image 4" src="https://github.com/user-attachments/assets/c2b15aa3-2579-400e-a887-afa7b799b9b1" />
 
@@ -180,7 +180,7 @@ Copy it all from here and paste that into index.php and click on save and close.
 
 Setup our netcat listner on listening mode on the port you specified on webshell.
 
-And just trigger the index.php page of this website. url = [`http://10.10.160.163/](http://10.10.160.163/administrator/index.php?option=com_templates&view=template&id=506&file=L2luZGV4LnBocA%3D%3D)index.php`
+And just trigger the index.php page of this website. url = [`http://10.10.160.163/index.php`]
 
 And we should get the shell on our kali machine now.
 
