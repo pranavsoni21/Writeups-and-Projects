@@ -275,12 +275,7 @@ lrwxrwxrwx  1 jjameson jjameson   9 Dec 14  2019 .bash_history -> /dev/null
 While checking sudo privileges of user jjameson, we got to know that we can run yum as sudo.
 
 We can check, how can we escalate our privileges via yum on gtfobins.
-
-[yum
-            
-            |
-            
-            GTFOBins](https://gtfobins.github.io/gtfobins/yum/#sudo)
+[`https://gtfobins.github.io/gtfobins/yum/#sudo`]
 
 <img width="1894" height="873" alt="image 12" src="https://github.com/user-attachments/assets/75c6a43c-18aa-43d5-94d3-61866c16e018" />
 
