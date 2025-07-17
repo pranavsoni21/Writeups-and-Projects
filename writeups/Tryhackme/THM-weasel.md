@@ -140,17 +140,17 @@ Here, we go! jupyter notebook’s access token, looks like we can use this token
 
 Here, as we were expecting, it requires token to authenticate and we have that token now, let’s authenticate ourself and change password to `pass` . 
 
-![image.png](image.png)
+<img width="1917" height="795" alt="image" src="https://github.com/user-attachments/assets/6ec03ea9-4bc5-42ac-8561-ba51c353ecce" />
 
 Successfully logged inside of jupyter notebook server.
 
 Here, we can see that same directory which was hosted on smbserver too. 
 
-![Screenshot 2025-07-17 143618.png](Screenshot_2025-07-17_143618.png)
+<img width="1917" height="707" alt="Screenshot_2025-07-17_143618" src="https://github.com/user-attachments/assets/690061ee-44ef-48cc-a9ac-5a229c4602bc" />
 
 Now, we can potentialy edit that weasel.ipynb file and will inject our reverse shell there. Let’s check.
 
-![Screenshot 2025-07-17 143756.png](Screenshot_2025-07-17_143756.png)
+<img width="1918" height="711" alt="Screenshot_2025-07-17_143756" src="https://github.com/user-attachments/assets/fbc46b80-0f36-4e4f-9502-a61369f89c02" />
 
 Can inject this payload here:
 
@@ -256,17 +256,18 @@ dev-datasci-lowpriv@DEV-DATASCI-JUP C:\Users\dev-datasci-lowpriv\Desktop>dir
 
 Run that script via powershell.
 
-![image.png](image%201.png)
+<img width="1806" height="670" alt="image 1" src="https://github.com/user-attachments/assets/38382aaf-1681-4b22-abfa-8ae35a91a0a2" />
 
 This script discovered a winlogon credentials:
 
-![image.png](image%202.png)
+<img width="1866" height="573" alt="image 2" src="https://github.com/user-attachments/assets/74caa0f2-eefd-493d-8959-86e7de334ecc" />
 
 Current user’s login password.
 
 Then, it discovered a severe vulnerablity , AlwaysInstallElevated:
 
-![image.png](image%203.png)
+<img width="1880" height="696" alt="image 3" src="https://github.com/user-attachments/assets/ba7748ee-e45d-455c-9653-88be6158bbdd" />
+
 
 What is this vulnerablity and how can we use that for privilege escalation?
 
