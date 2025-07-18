@@ -84,7 +84,7 @@ openssl s_client -connect 10.10.165.99:7070
 
 And we get some information about the server running: Anydesk
 
-![image.png](image.png)
+<img width="1902" height="546" alt="image" src="https://github.com/user-attachments/assets/ff49eaa2-968d-4ea4-90de-5966d25032d9" />
 
 Let’s search on google, if any exploit available for this service.
 
@@ -92,9 +92,9 @@ There I got a exploit(remote code execution) for version 5.5.2, although we don�
 
 [AnyDesk 5.5.2 - Remote Code Execution](https://www.exploit-db.com/exploits/49613)
 
-![image.png](image%201.png)
+<img width="1917" height="763" alt="image 1" src="https://github.com/user-attachments/assets/3d38c590-2127-4f7c-bc45-0cac2ce3cdf0" />
 
-![image.png](image%202.png)
+<img width="1915" height="250" alt="image 2" src="https://github.com/user-attachments/assets/a0db7f0a-f10f-4c90-8427-8c778f23505d" />
 
 Let’s get that exploit on our working directory.
 
@@ -144,7 +144,8 @@ shellcode += b"\xb2\x97\x99\xce\xea\xe2\x40\x85\x54"
 
 Copy this shellcode and replace in payload.
 
-![image.png](image%203.png)
+<img width="1917" height="710" alt="image 3" src="https://github.com/user-attachments/assets/13f75f5a-71f5-4cc2-bb19-35db6649ad61" />
+
 
 Just setup our netcat on listning mode on port 4445:
 
@@ -163,7 +164,7 @@ sending payload ...
 reverse shell should connect within 5 seconds
 ```
 
-![image.png](image%204.png)
+<img width="1885" height="315" alt="image 4" src="https://github.com/user-attachments/assets/c2e893d1-640d-455b-ab87-be9721d3b9fd" />
 
 We can now grab the user flag:
 
@@ -208,7 +209,7 @@ THM{REDACTED}
 
 While searching for vectors for privilege escalation, I found that we don’t have sudo privilege, no cronjob running, not any interesting files. So, I went for searching SUID binaries and there I saw a unusual binary /sbin/setcap.
 
-![image.png](image%205.png)
+<img width="1822" height="561" alt="image 5" src="https://github.com/user-attachments/assets/e019b674-f9ce-4fce-b827-fc99168b2682" />
 
 The `setcap` binary is a Linux tool used to assign **capabilities** to executables. Capabilities are a fine-grained alternative to the all-or-nothing root privileges traditionally used by Unix systems. If **`setcap` is SUID-root** or the current user can **run it as root** (e.g., via `sudo` or misconfigured permissions), it can be abused to escalate privileges.
 
