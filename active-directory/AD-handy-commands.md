@@ -59,7 +59,7 @@
         		impacket-psexec 'Domain/user:Password9@<ip>'
         		psexec.py <user-name>@<target-ip> -hashes <hash>
         3. RDP:
-        		xfreerdp /v:[ip_address] /u:[username] /p:[password] /dynamic-resolution /cert:ignore
+        		xfreerdp3 /v:[ip_address] /u:[username] /p:[password] /dynamic-resolution /cert:ignore
         ```
         
     - Ipv6 takeover
