@@ -6,11 +6,12 @@ This repo contains my personal cybersecurity projects, scripts, and writeups fro
 
 - recon-scripts/: Custom Python/Bash recon tools
 - privesc-scripts/: Privilege escalation enumeration scripts
-- active-directory/: Active directory attack scripts
+- active-directory/: Active directory attack scripts and handy commands
 - exploit-scripts/: Custom PoCs and exploit demos
 - writeups/: My personal writeups (no solutions/flags)
 - notes/: Markdown notes for quick revision
 - reporting-template/: Professional pentest report format
+- web-security/: Web application vulnerabilities cheat sheet
 
 ## Disclaimer
 This repo is for educational purposes only. Do not use these tools or techniques on systems you don’t own or have permission to test.
