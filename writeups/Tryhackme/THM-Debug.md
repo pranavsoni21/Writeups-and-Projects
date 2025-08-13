@@ -106,7 +106,7 @@ Methodology:
 
 ### Initial Access
 
-Following the above methodology, created a php serialised code containing for creating the payload, which contains reverse shell.
+Following the above methodology, created a php serialised code for creating the payload, which contains reverse shell.
 
 ```bash
 ┌──(ghost㉿kali)-[~/tryhackme/debug]
