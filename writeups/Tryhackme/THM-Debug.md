@@ -58,25 +58,25 @@ Port 80:
 
 Default Apache web page: It works!, nothing interesting even in source code.
 
-![image.png](image.png)
+<img width="1906" height="795" alt="image" src="https://github.com/user-attachments/assets/3c4bcbd2-6f99-48ec-8b3a-10d6f08191d2" />
 
 And there was some static website hosted on `/index.php` endpoint.
 
-![image.png](image%201.png)
+<img width="1898" height="801" alt="image 1" src="https://github.com/user-attachments/assets/5532af9c-c4eb-4f02-b535-5db93a9811e8" />
 
 Directory Fuzzing:
 
-![image.png](image%202.png)
+<img width="1680" height="740" alt="image 2" src="https://github.com/user-attachments/assets/afd9be0d-1051-4ab0-9aa5-c06f48f1c588" />
 
 Direcoty fuzzing revealed an interesting endpoints to look - `/backup`  
 
-![image.png](image%203.png)
+<img width="1909" height="578" alt="image 3" src="https://github.com/user-attachments/assets/39090e9a-429a-4fc2-8c38-4f8604e3bc82" />
 
 From all those files, one file `index.php.bak` is of our interest, which potentially holds backend code used for that `index.php` endpoint.
 
 Downloading that file and reviewing it’s code revealed a juicy detail or maybe potential vulnerablility in that code, basically vulnerable to php deserialisation.
 
-![image.png](image%204.png)
+<img width="1536" height="667" alt="image 4" src="https://github.com/user-attachments/assets/6d2e8868-1de5-436a-86fe-fa1bab25c9da" />
 
 What that code is doing?
 
@@ -106,7 +106,7 @@ Methodology:
 
 ### Initial Access
 
-Following the above methodology, created a php serialised code containing for creating the payload, which contains reverse shell.
+Following the above methodology, created a php serialised code for creating the payload, which contains reverse shell.
 
 ```bash
 ┌──(ghost㉿kali)-[~/tryhackme/debug]
@@ -130,7 +130,7 @@ This script will
 
 Generated final payload via this php code.
 
-![image.png](image%205.png)
+<img width="1906" height="128" alt="image 5" src="https://github.com/user-attachments/assets/aa431f96-cff5-4f82-920c-1e1383f08da4" />
 
 At this point, just started netcat listner and delivered that payload to the `debug` parameter like these:
 
@@ -144,23 +144,23 @@ http://10.201.44.136/shell.php
 
 And went to `/shell.php` endpoint to trigger that reverse shell and got the shell back on my machine.
 
-![image.png](image%206.png)
+<img width="1549" height="531" alt="image 6" src="https://github.com/user-attachments/assets/2d67d983-72d9-466f-a778-64ed6ea3704d" />
 
 And here in that same directory, where we landed, there was a file `.htpasswd` which revealed james user’s password hash.
 
-![image.png](image%207.png)
+<img width="1746" height="85" alt="image 7" src="https://github.com/user-attachments/assets/a1b4977f-f9ee-4c14-a485-2b6aba75ce3c" />
 
 Cracked that hash via john the ripper
 
-![image.png](image%208.png)
+<img width="1590" height="135" alt="image 8" src="https://github.com/user-attachments/assets/9238100f-1a7b-494f-8959-6e8cd8253da5" />
 
 With the following credentials switched to user james in that same shell
 
-![image.png](image%209.png)
+<img width="1530" height="125" alt="image 9" src="https://github.com/user-attachments/assets/1b4ca604-0ba0-4d5d-9fff-f84f7b9c44d5" />
 
 Grabbed user flag in the james’s home directory:
 
-![image.png](image%2010.png)
+<img width="1381" height="80" alt="image 10" src="https://github.com/user-attachments/assets/87515ccd-09e2-436d-9a5c-0a18668eaf29" />
 
 ---
 
@@ -168,27 +168,27 @@ Grabbed user flag in the james’s home directory:
 
 There was suspicious note file which revealed something juicy hint for us.
 
-![image.png](image%2011.png)
+<img width="1667" height="432" alt="image 11" src="https://github.com/user-attachments/assets/16a1db57-b99b-4972-af60-d19a1f2bd0be" />
 
 Found out files from /etc directory, on which user james had write access to.
 
-![image.png](image%2012.png)
+<img width="1792" height="252" alt="image 12" src="https://github.com/user-attachments/assets/f5d7aec1-5d37-4c76-b7d0-3fee2c079679" />
 
 Changed directory to `/etc/update-motd.d` where user james had write access and enumerating those files, found `00-header` file where we can easily add our commands too.
 
-![image.png](image%2013.png)
+<img width="1685" height="379" alt="image 13" src="https://github.com/user-attachments/assets/2cec7dc8-0d64-44f4-b310-d92af2f15dbd" />
 
 Simply added `chmod 4777 /bin/bash` command in that file, which will set SETUID bit on /bin/bash binary, when we log in as user james via ssh.
 
-![image.png](image%2014.png)
+<img width="1147" height="31" alt="image 14" src="https://github.com/user-attachments/assets/f945a3eb-0472-40d5-96f9-2866dc0251c4" />
 
 Logged in to user james account via SSH
 
-![image.png](image%2015.png)
+<img width="1777" height="507" alt="image 15" src="https://github.com/user-attachments/assets/d8f083ac-839e-465e-9a2b-19b48e05c750" />
 
 Executed /bin/bash binary and got euid set to root and now, we are able to read root.txt file.
 
-![image.png](image%2016.png)
+<img width="1810" height="503" alt="image 16" src="https://github.com/user-attachments/assets/92039a31-162a-47f1-b118-1a562697a69c" />
 
 ---
 
