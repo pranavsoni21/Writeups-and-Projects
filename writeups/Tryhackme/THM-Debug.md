@@ -1,6 +1,6 @@
 # Debug
 
----
+***
 
 Platform: Tryhackme
 
@@ -10,7 +10,7 @@ Initial Access: PHP deserialisation vulnerability
 
 Privilege Escalation: Misconfigured File permissions
 
----
+***
 
 Nmap Scan:
 
@@ -49,60 +49,60 @@ Network Distance: 5 hops
 Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 ```
 
-| Ports | Methodology |
-| --- | --- |
-| 22 (SSH) | Potentially for later use. |
+| Ports     | Methodology                                                                                   |
+| --------- | --------------------------------------------------------------------------------------------- |
+| 22 (SSH)  | Potentially for later use.                                                                    |
 | 80 (HTTP) | Apache httpd 2.4.18 version running on ubuntu. Have to look at what exactly is running there. |
 
 Port 80:
 
 Default Apache web page: It works!, nothing interesting even in source code.
 
-<img width="1906" height="795" alt="image" src="https://github.com/user-attachments/assets/3c4bcbd2-6f99-48ec-8b3a-10d6f08191d2" />
+<figure><img src="https://github.com/user-attachments/assets/3c4bcbd2-6f99-48ec-8b3a-10d6f08191d2" alt=""><figcaption></figcaption></figure>
 
 And there was some static website hosted on `/index.php` endpoint.
 
-<img width="1898" height="801" alt="image 1" src="https://github.com/user-attachments/assets/5532af9c-c4eb-4f02-b535-5db93a9811e8" />
+<figure><img src="https://github.com/user-attachments/assets/5532af9c-c4eb-4f02-b535-5db93a9811e8" alt=""><figcaption></figcaption></figure>
 
 Directory Fuzzing:
 
-<img width="1680" height="740" alt="image 2" src="https://github.com/user-attachments/assets/afd9be0d-1051-4ab0-9aa5-c06f48f1c588" />
+<figure><img src="https://github.com/user-attachments/assets/afd9be0d-1051-4ab0-9aa5-c06f48f1c588" alt=""><figcaption></figcaption></figure>
 
-Direcoty fuzzing revealed an interesting endpoints to look - `/backup`  
+Direcoty fuzzing revealed an interesting endpoints to look - `/backup`
 
-<img width="1909" height="578" alt="image 3" src="https://github.com/user-attachments/assets/39090e9a-429a-4fc2-8c38-4f8604e3bc82" />
+<figure><img src="https://github.com/user-attachments/assets/39090e9a-429a-4fc2-8c38-4f8604e3bc82" alt=""><figcaption></figcaption></figure>
 
 From all those files, one file `index.php.bak` is of our interest, which potentially holds backend code used for that `index.php` endpoint.
 
 Downloading that file and reviewing it’s code revealed a juicy detail or maybe potential vulnerablility in that code, basically vulnerable to php deserialisation.
 
-<img width="1536" height="667" alt="image 4" src="https://github.com/user-attachments/assets/6d2e8868-1de5-436a-86fe-fa1bab25c9da" />
+<figure><img src="https://github.com/user-attachments/assets/6d2e8868-1de5-436a-86fe-fa1bab25c9da" alt=""><figcaption></figcaption></figure>
 
 What that code is doing?
 
-- **Class Definition**
-    - `FormSubmit` stores form data (`name`, `email`, `comments`) into a text file (`message.txt`).
-    - `$form_file` is the file name.
-    - `$message` stores the constructed message string.
-- **SaveMessage() method**
-    - Pulls values from `$_GET` without sanitization.
-    - Builds `$this->message` with the form values.
-- **__destruct() method**
-    - Runs **automatically when the object is destroyed** (end of script).
-    - Appends the `$message` to `message.txt` in the current directory.
-    - Prints a success message.
-- **Main execution**
-    - `$debug = $_GET['debug'] ?? '';`
-    - `$messageDebug = unserialize($debug);` ← **big problem**
-    - Creates a new `FormSubmit` object.
-    - Calls `SaveMessage()`.
+* **Class Definition**
+  * `FormSubmit` stores form data (`name`, `email`, `comments`) into a text file (`message.txt`).
+  * `$form_file` is the file name.
+  * `$message` stores the constructed message string.
+* **SaveMessage() method**
+  * Pulls values from `$_GET` without sanitization.
+  * Builds `$this->message` with the form values.
+* **\_\_destruct() method**
+  * Runs **automatically when the object is destroyed** (end of script).
+  * Appends the `$message` to `message.txt` in the current directory.
+  * Prints a success message.
+* **Main execution**
+  * `$debug = $_GET['debug'] ?? '';`
+  * `$messageDebug = unserialize($debug);` ← **big problem**
+  * Creates a new `FormSubmit` object.
+  * Calls `SaveMessage()`.
 
 Methodology:
 
-- `unserialize()` on **unsanitized user input** (`$_GET['debug']`) lets an attacker create a serialized PHP object of any class — including `FormSubmit`.
-- If an attacker injects a serialized `FormSubmit` object with a malicious `$form_file` (e.g., `/var/www/html/shell.php`) and `$message` containing PHP code, the destructor will **write** to that file, resulting in **Remote Code Execution (RCE)**.
+* `unserialize()` on **unsanitized user input** (`$_GET['debug']`) lets an attacker create a serialized PHP object of any class — including `FormSubmit`.
+* If an attacker injects a serialized `FormSubmit` object with a malicious `$form_file` (e.g., `/var/www/html/shell.php`) and `$message` containing PHP code, the destructor will **write** to that file, resulting in **Remote Code Execution (RCE)**.
 
----
+***
 
 ### Initial Access
 
@@ -120,17 +120,17 @@ echo urlencode(serialize(new FormSubmit));
 ?>
 ```
 
-This script will 
+This script will
 
-- create a new class named `FormSubmit`
-- `$form_file` variable set to `shell.php` , meaning if this object is unserialized by vulnerable code, and later the object’s destructor writes to `$form_file`, it will write to a file named `shell.php` .
-- `$message` variable contains malicious PHP code that executes a reverse shell.
-- `serialize(new FormSubmit)` : Makes an object with those malicious property values.
-- `urlencode()` encodes for flawless URL delivery.
+* create a new class named `FormSubmit`
+* `$form_file` variable set to `shell.php` , meaning if this object is unserialized by vulnerable code, and later the object’s destructor writes to `$form_file`, it will write to a file named `shell.php` .
+* `$message` variable contains malicious PHP code that executes a reverse shell.
+* `serialize(new FormSubmit)` : Makes an object with those malicious property values.
+* `urlencode()` encodes for flawless URL delivery.
 
 Generated final payload via this php code.
 
-<img width="1906" height="128" alt="image 5" src="https://github.com/user-attachments/assets/aa431f96-cff5-4f82-920c-1e1383f08da4" />
+<figure><img src="https://github.com/user-attachments/assets/aa431f96-cff5-4f82-920c-1e1383f08da4" alt=""><figcaption></figcaption></figure>
 
 At this point, just started netcat listner and delivered that payload to the `debug` parameter like these:
 
@@ -144,52 +144,52 @@ http://10.201.44.136/shell.php
 
 And went to `/shell.php` endpoint to trigger that reverse shell and got the shell back on my machine.
 
-<img width="1549" height="531" alt="image 6" src="https://github.com/user-attachments/assets/2d67d983-72d9-466f-a778-64ed6ea3704d" />
+<figure><img src="https://github.com/user-attachments/assets/2d67d983-72d9-466f-a778-64ed6ea3704d" alt=""><figcaption></figcaption></figure>
 
 And here in that same directory, where we landed, there was a file `.htpasswd` which revealed james user’s password hash.
 
-<img width="1746" height="85" alt="image 7" src="https://github.com/user-attachments/assets/a1b4977f-f9ee-4c14-a485-2b6aba75ce3c" />
+<figure><img src="https://github.com/user-attachments/assets/a1b4977f-f9ee-4c14-a485-2b6aba75ce3c" alt=""><figcaption></figcaption></figure>
 
 Cracked that hash via john the ripper
 
-<img width="1590" height="135" alt="image 8" src="https://github.com/user-attachments/assets/9238100f-1a7b-494f-8959-6e8cd8253da5" />
+<figure><img src="https://github.com/user-attachments/assets/9238100f-1a7b-494f-8959-6e8cd8253da5" alt=""><figcaption></figcaption></figure>
 
 With the following credentials switched to user james in that same shell
 
-<img width="1530" height="125" alt="image 9" src="https://github.com/user-attachments/assets/1b4ca604-0ba0-4d5d-9fff-f84f7b9c44d5" />
+<figure><img src="https://github.com/user-attachments/assets/1b4ca604-0ba0-4d5d-9fff-f84f7b9c44d5" alt=""><figcaption></figcaption></figure>
 
 Grabbed user flag in the james’s home directory:
 
-<img width="1381" height="80" alt="image 10" src="https://github.com/user-attachments/assets/87515ccd-09e2-436d-9a5c-0a18668eaf29" />
+<figure><img src="https://github.com/user-attachments/assets/87515ccd-09e2-436d-9a5c-0a18668eaf29" alt=""><figcaption></figcaption></figure>
 
----
+***
 
 ### Privilege Escalation
 
 There was suspicious note file which revealed something juicy hint for us.
 
-<img width="1667" height="432" alt="image 11" src="https://github.com/user-attachments/assets/16a1db57-b99b-4972-af60-d19a1f2bd0be" />
+<figure><img src="https://github.com/user-attachments/assets/16a1db57-b99b-4972-af60-d19a1f2bd0be" alt=""><figcaption></figcaption></figure>
 
 Found out files from /etc directory, on which user james had write access to.
 
-<img width="1792" height="252" alt="image 12" src="https://github.com/user-attachments/assets/f5d7aec1-5d37-4c76-b7d0-3fee2c079679" />
+<figure><img src="https://github.com/user-attachments/assets/f5d7aec1-5d37-4c76-b7d0-3fee2c079679" alt=""><figcaption></figcaption></figure>
 
 Changed directory to `/etc/update-motd.d` where user james had write access and enumerating those files, found `00-header` file where we can easily add our commands too.
 
-<img width="1685" height="379" alt="image 13" src="https://github.com/user-attachments/assets/2cec7dc8-0d64-44f4-b310-d92af2f15dbd" />
+<figure><img src="https://github.com/user-attachments/assets/2cec7dc8-0d64-44f4-b310-d92af2f15dbd" alt=""><figcaption></figcaption></figure>
 
 Simply added `chmod 4777 /bin/bash` command in that file, which will set SETUID bit on /bin/bash binary, when we log in as user james via ssh.
 
-<img width="1147" height="31" alt="image 14" src="https://github.com/user-attachments/assets/f945a3eb-0472-40d5-96f9-2866dc0251c4" />
+<figure><img src="https://github.com/user-attachments/assets/f945a3eb-0472-40d5-96f9-2866dc0251c4" alt=""><figcaption></figcaption></figure>
 
 Logged in to user james account via SSH
 
-<img width="1777" height="507" alt="image 15" src="https://github.com/user-attachments/assets/d8f083ac-839e-465e-9a2b-19b48e05c750" />
+<figure><img src="https://github.com/user-attachments/assets/d8f083ac-839e-465e-9a2b-19b48e05c750" alt=""><figcaption></figcaption></figure>
 
 Executed /bin/bash binary and got euid set to root and now, we are able to read root.txt file.
 
-<img width="1810" height="503" alt="image 16" src="https://github.com/user-attachments/assets/92039a31-162a-47f1-b118-1a562697a69c" />
+<figure><img src="https://github.com/user-attachments/assets/92039a31-162a-47f1-b118-1a562697a69c" alt=""><figcaption></figcaption></figure>
 
----
+***
 
 That’s it for this machine.✅
