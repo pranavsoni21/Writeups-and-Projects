@@ -1,7 +1,7 @@
 # Table of contents
 
 * [writeups](README.md)
-  * [Tryhackme](writeups/tryhackme/README.md)
+  * [Tryhackme](readme/tryhackme/README.md)
     * [0day](writeups/Tryhackme/THM-0day.md)
     * [CMSpit](writeups/Tryhackme/THM-CMSpit.md)
     * [Debug](writeups/Tryhackme/THM-Debug.md)
