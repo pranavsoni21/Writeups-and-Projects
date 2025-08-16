@@ -1,14 +1,6 @@
 # Table of contents
 
-* [CyberSecurity Projects](README.md)
-* [Web-security](web-security/README.md)
-  * [Clickjacking](Web-security/Clickjacking-cheat-sheet.md)
-  * [XSS](Web-security/XSS-cheat-sheet.md)
-* [active-directory](active-directory/README.md)
-  * [AD handy commands](active-directory/AD-handy-commands.md)
-* [recon-scripts](recon-scripts/README.md)
-  * [Advanced Python Port Scanner](recon-scripts/port-scanner-README.md)
-* [writeups](writeups/README.md)
+* [writeups](README.md)
   * [Tryhackme](writeups/tryhackme/README.md)
     * [0day](writeups/Tryhackme/THM-0day.md)
     * [CMSpit](writeups/Tryhackme/THM-CMSpit.md)
