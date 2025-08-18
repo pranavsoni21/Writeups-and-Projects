@@ -4,7 +4,7 @@ Can you breach the server? - by TeneBrae93
 
 ---
 
-Platform: Tryhackme
+Platform: [Tryhackme](https://tryhackme.com/room/silverplatter)
 
 Difficulty: Medium
 
