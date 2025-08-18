@@ -9,7 +9,7 @@
     * [HaskHell](writeups/Tryhackme/THM-Haskhell.md)
     * [Oh My Webserver](writeups/Tryhackme/THM-Oh-my-webserver.md)
     * [Unbaked Pie](writeups/Tryhackme/THM-Unbaked-pie.md)
-    * [TryHackMe - Year of the Jellyfish](writeups/Tryhackme/THM-Year-of-the-jellyfish.md)
+    * [Year of the Jellyfish](writeups/Tryhackme/THM-Year-of-the-jellyfish.md)
     * [Airplane](writeups/Tryhackme/THM-airplane.md)
     * [Annie](writeups/Tryhackme/THM-annie.md)
     * [Breakme](writeups/Tryhackme/THM-breakme.md)
