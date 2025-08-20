@@ -23,3 +23,4 @@
     * [Umbrella](writeups/Tryhackme/THM-umbrella.md)
     * [Weasel](writeups/Tryhackme/THM-weasel.md)
     * [Willow](writeups/Tryhackme/THM-willow.md)
+    * [Silver Platter](readme/tryhackme/silver-platter.md)
