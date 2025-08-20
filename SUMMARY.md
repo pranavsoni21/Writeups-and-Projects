@@ -1,6 +1,6 @@
 # Table of contents
 
-* [writeups](README.md)
+* [Writeups](README.md)
   * [Tryhackme](readme/tryhackme/README.md)
     * [0day](writeups/Tryhackme/THM-0day.md)
     * [CMSpit](writeups/Tryhackme/THM-CMSpit.md)
