@@ -25,3 +25,5 @@
     * [Willow](writeups/Tryhackme/THM-willow.md)
     * [Silver Platter](readme/tryhackme/silver-platter.md)
     * [Razorblack](readme/tryhackme/razorblack.md)
+  * [Hackthebox](readme/hackthebox/README.md)
+    * [Editor](readme/hackthebox/editor.md)
