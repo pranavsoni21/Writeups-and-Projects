@@ -3,13 +3,8 @@ description: >-
   These guys call themselves hackers. Can you show them who's the boss ?? - by
   Xyan1d3
 icon: chart-network
-cover: ../../.gitbook/assets/Screenshot 2025-08-20 193601 (1).png
-coverY: 0
 layout:
   width: default
-  cover:
-    visible: true
-    size: full
   title:
     visible: true
   description:
