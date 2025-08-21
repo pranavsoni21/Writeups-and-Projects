@@ -38,14 +38,14 @@ Machine : Windows AD
 \[twilliams]✅
 
 * Sprayed that password via nxc and found a user ‘sbradley’ whose status shows : Password must change.
-* Change sbradley’s password via [smbpasswd.py](http://smbpasswd.py)
+* Change sbradley’s password via smbpasswd.py
 
 \[sbradley]✅
 
 * With sbradley’s pass enumerated smb shares and got a suspicious share ‘trash’.
 * In that share found a chat-log file and a zip file.
 * Cracked that zip file, uncompressed it and got system.hive & ntds.dit file.
-* Extracted ntds with [secretsdump.py](http://secretsdump.py)
+* Extracted ntds with secretsdump.py
 * Tested all those hashed with username ‘lvetrova’ and found hash of her account.
 
 \[lvetrova]✅
