@@ -1,7 +1,6 @@
 ---
-icon: money-check-pen
-cover: >-
-  https://images.unsplash.com/photo-1434030216411-0b793f4b4173?crop=entropy&cs=srgb&fm=jpg&ixid=M3wxOTcwMjR8MHwxfHNlYXJjaHwxfHxXcml0ZXxlbnwwfHx8fDE3NTU3NTE2MjV8MA&ixlib=rb-4.1.0&q=85
+icon: image-user
+cover: .gitbook/assets/cover-page.png
 coverY: 0
 layout:
   width: default
@@ -22,5 +21,8 @@ layout:
     visible: true
 ---
 
-# Writeups
+# About Me
 
+Hi, I’m Pranav Soni. I’m a PJPT-certified cybersecurity enthusiast and currently pursuing my Bachelor's degree from Chandigarh University. With over two years of hands-on practice in CTFs, labs, and security challenges, I’ve worked to sharpen my skills in penetration testing and problem-solving. I’m also ranked among the top 1% of users on TryHackMe.
+
+Alongside cybersecurity, I like creating small projects and tools in python. Outside of tech, I’m passionate about reading books and enjoy sports like cricket, football, and badminton.
