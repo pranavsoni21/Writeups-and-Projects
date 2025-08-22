@@ -28,4 +28,5 @@
     * [Razorblack](readme/tryhackme/razorblack.md)
   * [Hackthebox](readme/hackthebox/README.md)
     * [Editor](readme/hackthebox/editor.md)
-* [Projects](projects.md)
+* [Projects](projects/README.md)
+  * [Multithreaded Port Scanner](projects/multithreaded-port-scanner.md)
