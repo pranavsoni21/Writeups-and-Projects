@@ -7,6 +7,8 @@ description: >-
 
 # Multithreaded Port Scanner
 
+#### Check it out : [port-scanner.py](port-scanner.py)
+
 #### Features
 
 * Multi-threaded scanning for faster results
