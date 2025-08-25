@@ -109,5 +109,32 @@ As SMB is open on the target machine, I tried various method to list SMB shares,
 └─$ nxc smb 10.201.74.77 -u 'guest' -p '' --shares
 ```
 
+<figure><img src="../../.gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
+
+Results revealed IPC$ share is readable with these credentials, so I tried to connect to it via smbclient, but there was nothing present on that share.
+
+```
+┌──(ghost㉿kali)-[~/tryhackme/soupedecode]
+└─$ smbclient '//10.201.74.77/IPC$' -U 'guest'
+```
+
+<figure><img src="../../.gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+
+Next I tried to brute force user's rid via netexec.
+
+```
+┌──(ghost㉿kali)-[~/tryhackme/soupedecode]
+└─$ nxc smb 10.201.74.77 -u 'guest' -p '' --rid-brute > users-messed-list.txt 
+```
+
+<figure><img src="../../.gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+
+As we got too many users from rid brute-force, now we can simply extract only username from this messed up list for further enumeration.
+
+```
+┌──(ghost㉿kali)-[~/tryhackme/soupedecode]
+└─$ cut -d'\' -f2 users-messed-list.txt | cut -d' ' -f1 > formatted-users-list.txt
+```
+
 <figure><img src="../../.gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
 

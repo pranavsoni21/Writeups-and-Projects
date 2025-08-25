@@ -33,7 +33,7 @@ Port 80:
 
 A static website is hosted on port 80.
 
-<figure><img src="../../.gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
 
 contact tab revealed a potential valid username - `scr1ptkiddy`
 
