@@ -91,3 +91,23 @@ Host script results:
 |_clock-skew: mean: -1s, deviation: 0s, median: -1s
 
 ```
+
+Looking at the open ports, it's clear we are dealing with some type of windows domain controller machine.
+
+First of all add DNS domain name to our /etc/hosts file.
+
+Domain Name - SOUPEDECODE.LOCAL
+
+Computer Name - DC01.SOUPEDECODE.LOCAL
+
+#### Initial Access as guest
+
+As SMB is open on the target machine, I tried various method to list SMB shares, but only login as a built-in guest user with an empty password worked via netexec.
+
+```
+┌──(ghost㉿kali)-[~/tryhackme/soupedecode]
+└─$ nxc smb 10.201.74.77 -u 'guest' -p '' --shares
+```
+
+<figure><img src="../../.gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
+
