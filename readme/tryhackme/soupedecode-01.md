@@ -178,3 +178,6 @@ Downloaded it on my own kali machine and got the user flag.
 <figure><img src="../../.gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
 
 ***
+
+### Access as service account 'file\_svc'
+
