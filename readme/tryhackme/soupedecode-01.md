@@ -29,7 +29,7 @@ Machine Type: Windows
 
 ***
 
-#### Initial enumeration
+### Initial enumeration
 
 Nmap scan results:
 
@@ -100,7 +100,7 @@ Domain Name - SOUPEDECODE.LOCAL
 
 Computer Name - DC01.SOUPEDECODE.LOCAL
 
-#### Initial Access as guest
+### Initial Access as guest
 
 As SMB is open on the target machine, I tried various method to list SMB shares, but only login as a built-in guest user with an empty password worked via netexec.
 
@@ -109,7 +109,7 @@ As SMB is open on the target machine, I tried various method to list SMB shares,
 └─$ nxc smb 10.201.74.77 -u 'guest' -p '' --shares
 ```
 
-<figure><img src="../../.gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (4) (1).png" alt=""><figcaption></figcaption></figure>
 
 Results revealed IPC$ share is readable with these credentials, so I tried to connect to it via smbclient, but there was nothing present on that share.
 
@@ -118,7 +118,7 @@ Results revealed IPC$ share is readable with these credentials, so I tried to co
 └─$ smbclient '//10.201.74.77/IPC$' -U 'guest'
 ```
 
-<figure><img src="../../.gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (6).png" alt=""><figcaption></figcaption></figure>
 
 Next I tried to brute force user's rid via netexec.
 
@@ -127,7 +127,7 @@ Next I tried to brute force user's rid via netexec.
 └─$ nxc smb 10.201.74.77 -u 'guest' -p '' --rid-brute > users-messed-list.txt 
 ```
 
-<figure><img src="../../.gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 As we got too many users from rid brute-force, now we can simply extract only username from this messed up list for further enumeration.
 
@@ -136,5 +136,45 @@ As we got too many users from rid brute-force, now we can simply extract only us
 └─$ cut -d'\' -f2 users-messed-list.txt | cut -d' ' -f1 > formatted-users-list.txt
 ```
 
+<figure><img src="../../.gitbook/assets/image (2) (1).png" alt=""><figcaption></figcaption></figure>
+
+***
+
+### Access as ybob317 and User flag
+
+I began by enumerating SMB shares on the target domain using the `nxc smb` tool with a list of usernames (reused as passwords). Instead of brute-forcing, we only tested exact username-password pairs and continued the enumeration even after discovering valid credentials. During this process, I identified valid credentials for **ybob317**.
+
+```
+┌──(ghost㉿kali)-[~/tryhackme/soupedecode]
+└─$ nxc smb 10.201.94.156 -u formatted-users-list.txt -p formatted-users-list.txt --no-brute --continue-on-success
+```
+
+<figure><img src="../../.gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+
+Then, I tried to enumerate shares with those valid credentials and found that user 'ybob317' had read access to 'Users' share.
+
+```
+┌──(ghost㉿kali)-[~/tryhackme/soupedecode]
+└─$ nxc smb 10.201.57.152 -u 'ybob317' -p 'REDACTED' --shares
+```
+
 <figure><img src="../../.gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
 
+Connected to 'Users' share via smbclient.
+
+```
+┌──(ghost㉿kali)-[~/tryhackme/soupedecode]
+└─$ smbclient '//10.201.57.152/Users' -U 'ybob317'
+```
+
+<figure><img src="../../.gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
+
+All the directories were inaccessible except 'ybob317' and there I got the Desktop directory and then in Desktop I got user flag.
+
+<figure><img src="../../.gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
+
+Downloaded it on my own kali machine and got the user flag.
+
+<figure><img src="../../.gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
+
+***
