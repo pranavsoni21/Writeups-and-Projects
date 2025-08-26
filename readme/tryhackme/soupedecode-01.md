@@ -277,3 +277,7 @@ Next, I used psexec to gain shell on the target machine with the obtained creden
 As this account had enough privileges, I was able to access Administrator directory and there in the Desktop directory I got the root flag.
 
 <figure><img src="../../.gitbook/assets/image (18).png" alt=""><figcaption></figcaption></figure>
+
+***
+
+That's it for this machine.✅
