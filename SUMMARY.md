@@ -27,6 +27,7 @@
     * [Silver Platter](readme/tryhackme/silver-platter.md)
     * [Razorblack](readme/tryhackme/razorblack.md)
     * [Soupedecode 01](readme/tryhackme/soupedecode-01.md)
+    * [Blog](readme/tryhackme/blog.md)
   * [Hackthebox](readme/hackthebox/README.md)
     * [Editor](readme/hackthebox/editor.md)
 * [Projects](projects/README.md)
