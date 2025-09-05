@@ -2,7 +2,6 @@
 description: >-
   These guys call themselves hackers. Can you show them who's the boss ?? - by
   Xyan1d3
-icon: chart-network
 layout:
   width: default
   title:

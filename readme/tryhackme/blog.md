@@ -1,6 +1,5 @@
 ---
 description: Billy Joel made a Wordpress blog! - by  Nameless0ne
-icon: browser
 ---
 
 # Blog
@@ -163,7 +162,7 @@ And I got 2 valid usernames - <mark style="color:yellow;">kwheel</mark> and <mar
 
 <figure><img src="../../.gitbook/assets/image (28).png" alt=""><figcaption></figcaption></figure>
 
-For confirmation, I also checked them on login page by entering random password for them.&#x20;
+For confirmation, I also checked them on login page by entering random password for them.
 
 <figure><img src="../../.gitbook/assets/image (29).png" alt=""><figcaption></figcaption></figure>
 

@@ -1,6 +1,5 @@
 ---
 description: Test your enumeration skills on this boot-to-root machine. - by josemlwdf
-icon: windows
 layout:
   width: default
   title:
