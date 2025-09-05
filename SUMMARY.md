@@ -28,6 +28,7 @@
     * [Razorblack](readme/tryhackme/razorblack.md)
     * [Soupedecode 01](readme/tryhackme/soupedecode-01.md)
     * [Blog](readme/tryhackme/blog.md)
+    * [Year of the fox](readme-1/tryhackme/year-of-the-fox.md)
   * [Hackthebox](readme/hackthebox/README.md)
     * [Editor](readme/hackthebox/editor.md)
 * [Projects](projects/README.md)
