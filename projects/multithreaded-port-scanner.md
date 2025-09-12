@@ -21,7 +21,7 @@ description: >-
 Requirements
 
 * Python 3.7+
-* &#x20;[`tabulate`](https://pypi.org/project/tabulate/) for prettier results
+* [`tabulate`](https://pypi.org/project/tabulate/) for prettier results
 
 Install dependencies:
 
@@ -69,7 +69,7 @@ This scans ports **1–10000** on `192.168.1.1` using **500 threads**.
 Time Taken - 4.56
 ```
 
-<figure><img src="../.gitbook/assets/image (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ***
 
