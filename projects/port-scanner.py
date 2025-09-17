@@ -19,8 +19,6 @@ def arguments():
     parser.add_argument("-p", "--ports", dest="ports", help="Port range to scan", default="1-65535")
     parser.add_argument("-t", "--threads", dest="threads", help="Number of threads to use", default="500")
     parser.add_argument("-v", "--verbose", dest="verbose", help="Verbose output", action="store_true")
-    parser.add_argument("-o", "--output", dest="output", help="Output file name", default="scan-result.txt")
-    parser.add_argument("-sV", "--service-detect", help="Enable service detection", action="store_true")
     args = parser.parse_args()
     return args
 
