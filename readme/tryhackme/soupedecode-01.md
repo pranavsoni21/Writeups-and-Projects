@@ -126,7 +126,7 @@ Next I tried to brute force user's rid via netexec.
 └─$ nxc smb 10.201.74.77 -u 'guest' -p '' --rid-brute > users-messed-list.txt 
 ```
 
-<figure><img src="../../.gitbook/assets/image (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 As we got too many users from rid brute-force, now we can simply extract only username from this messed up list for further enumeration.
 
@@ -148,7 +148,7 @@ I began by enumerating SMB shares on the target domain using the `nxc smb` tool 
 └─$ nxc smb 10.201.94.156 -u formatted-users-list.txt -p formatted-users-list.txt --no-brute --continue-on-success
 ```
 
-<figure><img src="../../.gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Then, I tried to enumerate shares with those valid credentials and found that user 'ybob317' had read access to 'Users' share.
 
