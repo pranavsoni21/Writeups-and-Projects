@@ -40,6 +40,7 @@
       * [Level04](readme-1/exploit-education/nebula/level04.md)
       * [Level05](readme-1/exploit-education/nebula/level05.md)
       * [Level06](readme-1/exploit-education/nebula/level06.md)
+      * [Level07](readme-1/exploit-education/nebula/level07.md)
 * [Projects](projects/README.md)
   * [Multithreaded Port Scanner](projects/multithreaded-port-scanner.md)
   * [Payload Obfuscator](projects/payload-obfuscator.md)
