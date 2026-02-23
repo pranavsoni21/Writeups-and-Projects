@@ -29,8 +29,6 @@
     * [Soupedecode 01](readme/tryhackme/soupedecode-01.md)
     * [Blog](readme/tryhackme/blog.md)
     * [Contrabando](readme-1/tryhackme/contrabando.md)
-  * [Hackthebox](readme/hackthebox/README.md)
-    * [Editor](readme/hackthebox/editor.md)
   * [Exploit Education](readme-1/exploit-education/README.md)
     * [Nebula](readme-1/exploit-education/nebula/README.md)
       * [Level00](readme-1/exploit-education/nebula/level00.md)
