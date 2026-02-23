@@ -44,4 +44,3 @@
       * [Level10](readme-1/exploit-education/nebula/level10.md)
 * [Projects](projects/README.md)
   * [Multithreaded Port Scanner](projects/multithreaded-port-scanner.md)
-  * [Payload Obfuscator](projects/payload-obfuscator.md)
