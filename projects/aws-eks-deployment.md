@@ -34,21 +34,71 @@ description: Deploying Flask App on AWS EKS with Terraform, Docker, and Kubernet
 
 <details>
 
-<summary>dfsfdffsfsffff</summary>
+<summary>Clone GitHub repository</summary>
 
-sdfsdfsffsffff
-
-```
-// some code
+```bash
+git clone https://github.com/pranavsoni21/aws-eks-deployment.git
+cd /aws-eks-deployment
 ```
 
 </details>
 
+<details>
+
+<summary>Build Docker Image</summary>
+
+{% code fullWidth="false" %}
+```bash
+docker build -t flask-k8s-app app/.
+```
+{% endcode %}
+
+<figure><img src="../.gitbook/assets/Screenshot 2026-03-21 173401.png" alt=""><figcaption></figcaption></figure>
+
+After this, you will end up with a docker image (flask-k8s-app:latest) built locally:
+
+<figure><img src="../.gitbook/assets/Screenshot 2026-03-21 173612.png" alt=""><figcaption></figcaption></figure>
+
+As I built multi-staged Dockerfile, you can see the image is very less - around 40 MB.
+
+</details>
+
+<details>
+
+<summary>Push Image to Docker Registry ( I used AWS ECR )</summary>
+
+To perform this step, first you have to create a ECR repository on AWS:
+
+{% hint style="info" %}
+Before creating AWS ECR repository via cli, make sure you already configured aws-cli with valid credentials and with needed IAM permission.
+{% endhint %}
+
+{% code overflow="wrap" %}
+```bash
+aws ecr create-repository --repository-name flask-k8s-app --image-scanning-configuration scanOnPush=true --region ap-south-1
+```
+{% endcode %}
+
+After repository creation, output will print out your repository URI like these, copy it somewhere as we will use it very often:
+
+{% code overflow="wrap" %}
+```
+"repositoryUri": "<account-id>.dkr.ecr.ap-south-1.amazonaws.com/flask-k8s-app"
+```
+{% endcode %}
+
+Now, tag your image for pushing it to ECR:
+
+{% code overflow="wrap" %}
+```
+```
+{% endcode %}
 
 
 
 
 
+</details>
 
 
 
