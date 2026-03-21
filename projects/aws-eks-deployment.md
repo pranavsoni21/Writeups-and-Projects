@@ -47,11 +47,9 @@ cd /aws-eks-deployment
 
 <summary>Build Docker Image</summary>
 
-{% code fullWidth="true" %}
-```bash
+```
 docker build -t flask-k8s-app app/.
 ```
-{% endcode %}
 
 <figure><img src="../.gitbook/assets/Screenshot 2026-03-21 173401.png" alt=""><figcaption></figcaption></figure>
 
@@ -84,11 +82,32 @@ After repository creation, output will print out your repository URI like these,
 Now, tag your image for pushing it to ECR:
 
 ```
+docker tag \
+flask-k8s-app:latest \
+816709079541.dkr.ecr.ap-south-1.amazonaws.com/flask-k8s-app:latest
 ```
 
+Get temporary login-password from AWS ECR to let docker push this image to our repo:
 
+```
+aws ecr get-login-password --region ap-south-1 | \
+docker login \
+--username AWS \
+--password-stdin \
+816709079541.dkr.ecr.ap-south-1.amazonaws.com/flask-k8s-app
+```
 
+Now, we are all set to push our docker image to AWS ECR:
 
+```
+docker push 816709079541.dkr.ecr.ap-south-1.amazonaws.com/flask-k8s-app:latest
+```
+
+<figure><img src="../.gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+
+For confirmation, we can also check this out on AWS console:
+
+<figure><img src="../.gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
 
 </details>
 

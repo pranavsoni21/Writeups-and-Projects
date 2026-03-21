@@ -33,7 +33,7 @@ Port 80:
 
 A static website is hosted on port 80.
 
-<figure><img src="../../.gitbook/assets/image (3) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (3) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 contact tab revealed a potential valid username - `scr1ptkiddy`
 
@@ -146,7 +146,7 @@ When I tried to log into user tyler’s account with that passwords, it was succ
 
 <figure><img src="../../.gitbook/assets/image 16.png" alt=""><figcaption></figcaption></figure>
 
-As tyler have full sudo privileges on the machine, I turned it into a root’s shell with `sudo su`&#x20;
+As tyler have full sudo privileges on the machine, I turned it into a root’s shell with `sudo su`
 
 <figure><img src="../../.gitbook/assets/image 17.png" alt=""><figcaption></figcaption></figure>
 
