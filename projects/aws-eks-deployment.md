@@ -47,7 +47,7 @@ cd /aws-eks-deployment
 
 <summary>Build Docker Image</summary>
 
-{% code fullWidth="false" %}
+{% code fullWidth="true" %}
 ```bash
 docker build -t flask-k8s-app app/.
 ```
@@ -65,34 +65,26 @@ As I built multi-staged Dockerfile, you can see the image is very less - around 
 
 <details>
 
-<summary>Push Image to Docker Registry ( I used AWS ECR )</summary>
+<summary><strong>Push Image to Docker Registry ( I used AWS ECR )</strong></summary>
 
 To perform this step, first you have to create a ECR repository on AWS:
 
-{% hint style="info" %}
 Before creating AWS ECR repository via cli, make sure you already configured aws-cli with valid credentials and with needed IAM permission.
-{% endhint %}
 
-{% code overflow="wrap" %}
 ```bash
 aws ecr create-repository --repository-name flask-k8s-app --image-scanning-configuration scanOnPush=true --region ap-south-1
 ```
-{% endcode %}
 
 After repository creation, output will print out your repository URI like these, copy it somewhere as we will use it very often:
 
-{% code overflow="wrap" %}
 ```
 "repositoryUri": "<account-id>.dkr.ecr.ap-south-1.amazonaws.com/flask-k8s-app"
 ```
-{% endcode %}
 
 Now, tag your image for pushing it to ECR:
 
-{% code overflow="wrap" %}
 ```
 ```
-{% endcode %}
 
 
 
