@@ -111,5 +111,21 @@ For confirmation, we can also check this out on AWS console:
 
 </details>
 
+<details>
+
+<summary>Provision AWS Infrastructure via terraform</summary>
+
+
+
+
+
+
+
+</details>
+
+
+
+
+
 
 
