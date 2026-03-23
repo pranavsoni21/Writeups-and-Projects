@@ -47,7 +47,7 @@ cd /aws-eks-deployment
 
 <summary>Build Docker Image</summary>
 
-```
+```bash
 docker build -t flask-k8s-app app/.
 ```
 
@@ -81,7 +81,7 @@ After repository creation, output will print out your repository URI like these,
 
 Now, tag your image for pushing it to ECR:
 
-```
+```bash
 docker tag \
 flask-k8s-app:latest \
 816709079541.dkr.ecr.ap-south-1.amazonaws.com/flask-k8s-app:latest
@@ -89,7 +89,7 @@ flask-k8s-app:latest \
 
 Get temporary login-password from AWS ECR to let docker push this image to our repo:
 
-```
+```bash
 aws ecr get-login-password --region ap-south-1 | \
 docker login \
 --username AWS \
@@ -99,7 +99,7 @@ docker login \
 
 Now, we are all set to push our docker image to AWS ECR:
 
-```
+```bash
 docker push 816709079541.dkr.ecr.ap-south-1.amazonaws.com/flask-k8s-app:latest
 ```
 
@@ -115,15 +115,33 @@ For confirmation, we can also check this out on AWS console:
 
 <summary>Provision AWS Infrastructure via terraform</summary>
 
+To provision whole infrastructure using terraform on AWS, you have to first configure your aws-cli with your AWS account who have permission to perform all this action.
 
+Once you configured aws-cli, terraform will automatically use that configuration to provision infrastructure on-behalf of your AWS user.
 
+```
+cd terraform/
+terraform init
+terraform apply
+```
 
+<figure><img src="../.gitbook/assets/image (69).png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src="../.gitbook/assets/image (70).png" alt=""><figcaption></figcaption></figure>
+
+Make sure it will create all these 22 resources on AWS. It will take up to 10 minutes to create all these resources. Once it's done, we can move on to our next step.
+
+</details>
+
+<details>
+
+<summary>Deploy app using kubernetes</summary>
+
+Before moving ahead, make sure you have kubernetes and kubectl installed on your machine.
 
 
 
 </details>
-
-
 
 
 
