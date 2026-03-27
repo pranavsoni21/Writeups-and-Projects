@@ -135,11 +135,71 @@ Make sure it will create all these 22 resources on AWS. It will take up to 10 mi
 
 <details>
 
-<summary>Deploy app using kubernetes</summary>
+<summary>Deploy app using Kubernetes</summary>
 
-Before moving ahead, make sure you have kubernetes and kubectl installed on your machine.
+Before moving ahead, make sure you have kubectl installed on your machine.
 
+```bash
+pranav@Ubuntu:~/aws-eks-deployment/kubernetes$ kubectl version --client
+Client Version: v1.35.3
+Kustomize Version: v5.7.1
+```
 
+If not installed you can install with these following steps:\
+[https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/)
+
+Once done, update kubeconfig file via aws-cli using these command:
+
+```bash
+aws eks update-kubeconfig --region ap-south-1 --name eks_cluster
+```
+
+It updates our local kubeConfig file with a new context named on our eks\_cluster, you can verify that and switch the context:
+
+```bash
+kubectl config get-contexts
+```
+
+<figure><img src="../.gitbook/assets/image (71).png" alt=""><figcaption></figcaption></figure>
+
+As we can see, our cluster context is added to config file and we are in that (\*) contexts. Now, we can verify this by checking nodes:&#x20;
+
+```bash
+pranav@Ubuntu:~/aws-eks-deployment/kubernetes$ kubectl get nodes
+NAME                                        STATUS   ROLES    AGE     VERSION
+ip-10-0-3-93.ap-south-1.compute.internal    Ready    <none>   5m21s   v1.30.14-eks-f69f56f
+ip-10-0-4-167.ap-south-1.compute.internal   Ready    <none>   5m17s   v1.30.14-eks-f69f56f
+```
+
+Our nodes are all set and ready to go!
+
+Before deploying our app on kubernetes, we need to create a secret (docker-registry), which it will need to pull image from our repository.
+
+```bash
+kubectl create secret docker-registry ecr-secret --docker-server=<ecr-uri> --docker-username=AWS --docker-password=$(aws ecr get-login-password --region ap-south-1)
+```
+
+Now, apply all the configuration files placed withing our Kubernetes directory
+
+```bash
+pranav@Ubuntu:~/aws-eks-deployment/kubernetes$ kubectl apply -f "*.yaml"
+configmap/app-config created
+deployment.apps/flask-deployment created
+service/flask-service created
+```
+
+Wait for 2-3 minutes and then check service for elb url:
+
+```bash
+pranav@Ubuntu:~/aws-eks-deployment/kubernetes$ kubectl get svc
+NAME            TYPE           CLUSTER-IP       EXTERNAL-IP                                                                PORT(S)        AGE
+flask-service   LoadBalancer   172.20.191.140   a8632cbaf5a0b472ba7aafe3f73ce2ad-1248056373.ap-south-1.elb.amazonaws.com   80:32136/TCP   5s
+kubernetes      ClusterIP      172.20.0.1       <none>                                                                     443/TCP        4m48s
+```
+
+Visit this URL, and you will be able to see that our app is successfully deployed to AWS EKS.
+
+<figure><img src="../.gitbook/assets/image (72).png" alt=""><figcaption></figcaption></figure>
 
 </details>
 
