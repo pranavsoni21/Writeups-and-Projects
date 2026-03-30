@@ -1,5 +1,8 @@
 ---
-description: Deploying Flask App on AWS EKS with Terraform, Docker, and Kubernetes
+description: >-
+  This project demonstrates deploying a containerized Flask application on AWS
+  EKS using Terraform, Docker, and Kubernetes, and exposing it to the internet
+  via a LoadBalancer service.
 ---
 
 # AWS-EKS-Deployment
@@ -10,9 +13,20 @@ description: Deploying Flask App on AWS EKS with Terraform, Docker, and Kubernet
 
 ***
 
+#### Request Flow
+
+```
+- ELB receives external traffic
+- Service routes traffic to pods
+- kube-proxy load balances requests
+- Pods serve the Flask application
+```
+
+***
+
 #### Tech Stack Used
 
-* AWS (EKS, VPC, ECR, EC2, IAM, ALB)
+* AWS (EKS, VPC, EC2, ECR, IAM, ELB)
 * Kubernetes
 * Docker
 * Terraform
@@ -26,7 +40,7 @@ description: Deploying Flask App on AWS EKS with Terraform, Docker, and Kubernet
 * Store Image in AWS ECR&#x20;
 * Deployed on AWS EKS&#x20;
 * Infrastructure provisioned via Terraform
-* Exposed via Elastic load balancer
+* Exposed application externally using Kubernetes Service (type: LoadBalancer)
 
 ***
 
@@ -38,7 +52,7 @@ description: Deploying Flask App on AWS EKS with Terraform, Docker, and Kubernet
 
 ```bash
 git clone https://github.com/pranavsoni21/aws-eks-deployment.git
-cd /aws-eks-deployment
+cd aws-eks-deployment/
 ```
 
 </details>
@@ -223,7 +237,7 @@ Now, we can the delete whole infrastructure which we created using terrafrom:&#x
 
 ```bash
 cd /terraform
-terraform destroy --auto-aprove
+terraform destroy --auto-approve
 ```
 
 </details>
@@ -265,5 +279,15 @@ Additionally, using ECR keeps the architecture consistent within the AWS ecosyst
 ```
 
 </details>
+
+***
+
+#### Key Learnings
+
+* Understood how Kubernetes manages containerized applications
+* Learned how AWS EKS integrates with EC2 and VPC networking
+* Gained hands-on experience with Docker image lifecycle (build → push → deploy)
+* Learned how Kubernetes Services expose applications externally using ELB
+* Debugged real-world issues like ImagePullBackOff and IAM misconfigurations
 
 ***
