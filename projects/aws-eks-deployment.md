@@ -4,13 +4,13 @@ description: Deploying Flask App on AWS EKS with Terraform, Docker, and Kubernet
 
 # AWS-EKS-Deployment
 
-#### Architecture Diagram:
+#### Architecture Diagram
 
-
+<figure><img src="../.gitbook/assets/lb_target_type_instance.png" alt=""><figcaption></figcaption></figure>
 
 ***
 
-#### Tech Stack Used:
+#### Tech Stack Used
 
 * AWS (EKS, VPC, ECR, EC2, IAM, ALB)
 * Kubernetes
@@ -20,17 +20,17 @@ description: Deploying Flask App on AWS EKS with Terraform, Docker, and Kubernet
 
 ***
 
-#### Features:
+#### Features
 
 * Containerized Flask application using docker multi-stage build
 * Store Image in AWS ECR&#x20;
 * Deployed on AWS EKS&#x20;
 * Infrastructure provisioned via Terraform
-* Exposed via ALB Ingress
+* Exposed via Elastic load balancer
 
 ***
 
-#### Steps to build:
+#### Steps to build
 
 <details>
 
@@ -203,7 +203,67 @@ Visit this URL, and you will be able to see that our app is successfully deploye
 
 </details>
 
+<details>
 
+<summary>Cleanup steps</summary>
 
+First of all delete all the Kubernetes configurations:
 
+```bash
+kubectl delete -f "*.yaml"
+```
 
+Then, we can delete our ecr repository which we created manually:
+
+```bash
+aws ecr delete-repository --repository-name flask-k8s-app --force
+```
+
+Now, we can the delete whole infrastructure which we created using terrafrom:&#x20;
+
+```bash
+cd /terraform
+terraform destroy --auto-aprove
+```
+
+</details>
+
+***
+
+#### Common Questions
+
+<details>
+
+<summary>What problem does Kubernetes solve in this project?</summary>
+
+```
+Kubernetes solves the problem of managing containerized applications at scale.
+In this project, it ensures that my Flask application runs reliably by handling
+deployment, scaling, and self-healing.
+
+For example, if a pod crashes, Kubernetes automatically recreates it. It also
+maintains the desired number of replicas using ReplicaSets. Services provide
+stable networking to access pods.
+
+Overall, Kubernetes abstracts infrastructure complexity and ensures my
+application is highly available, scalable, and production-ready.
+```
+
+</details>
+
+<details>
+
+<summary>Why did I use ECR instead of Docker Hub?</summary>
+
+```
+I used Amazon ECR instead of Docker Hub because it integrates natively with AWS services like EKS. 
+This allows worker nodes to securely pull images using IAM roles without needing to manage external credentials.
+
+It also improves performance and reliability since the images are stored within the same AWS region, reducing latency.
+
+Additionally, using ECR keeps the architecture consistent within the AWS ecosystem, which simplifies management and enhances security compared to public registries like Docker Hub.
+```
+
+</details>
+
+***
