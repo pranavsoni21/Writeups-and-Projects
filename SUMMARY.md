@@ -45,3 +45,4 @@
 * [Projects](projects/README.md)
   * [Multithreaded Port Scanner](projects/multithreaded-port-scanner.md)
   * [AWS-EKS-Deployment](projects/aws-eks-deployment.md)
+  * [Production Ready Pipeline](projects/production-ready-pipeline.md)
